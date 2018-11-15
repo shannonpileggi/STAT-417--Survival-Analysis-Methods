@@ -1,0 +1,213 @@
+\documentclass[letterpaper,12pt]{report}
+
+\usepackage{graphicx}
+\usepackage{amssymb,amsmath}
+\usepackage{epigraph,fancyvrb,eqparbox}
+%\usepackage[multiple]{footmisc}
+%\usepackage{menukeys}
+\usepackage{url}
+\usepackage[colorlinks = true, linkcolor = blue, urlcolor = blue]{hyperref}
+\usepackage{setspace}
+%\usepackage{fancyhdr}
+\usepackage{enumerate}
+\usepackage{menukeys}
+
+\usepackage[margin=0.75in]{geometry}
+
+%\usepackage{cellspace}
+%\setlength\cellspacetoplimit{5pt}
+%\setlength\cellspacebottomlimit{5pt}
+
+\setlength{\parindent}{0cm}
+
+%\newcommand\Tstrut{\rule{0pt}{2.6ex}}         % = `top' strut
+%\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}}   % = `bottom' strut
+
+%\lhead{STAT 217: Introduction to }
+\begin{document}
+
+\begin{center}
+\large{\textsc{STAT 417: Survival Analysis Methods}}\\
+California Polytechnic State University, San Luis Obispo\\
+\vskip10pt
+\large{\textsc{Project}}
+\end{center}
+
+\vskip10pt
+\begin{center}
+{\renewcommand{\arraystretch}{1.1}
+\begin{tabular}{lrl}
+\hline
+Phase & Percent & Due date \\
+\hline\hline
+\textbf{1:} Team selection      & 2\%  & Fri, Feb 9 9AM\\
+\textbf{2:} Data submission     & 18\% & Tue, Feb 20 9AM\\
+\textbf{3:} Final report        & 78\% & Fri, Mar 16 9AM\\
+\textbf{4:} Peer evaluation     & 2\%  & Fri, Mar 16 9AM\\
+\hline
+ & 100\% & \\
+\end{tabular}}
+\end{center}
+
+%\textbf{Contribute}
+%\begin{itemize}
+%    \item[] Be a good team member and contribute equally to the project.  At the end of the project, all students will provide peer evaluations of their team members.  These peer evaluations may be used to adjust overall project grades by $\pm$ 20\%.
+%    \item[]
+%\end{itemize}
+
+\fbox{\textbf{Purpose}}
+\begin{itemize}
+    \item[] The purpose of this project is to provide you the opportunity to perform some hands-on analysis of time-to-event data using the methods learned in class, and implementing these methods using Minitab and \texttt{R}.
+    \item[]
+\end{itemize}
+
+
+\fbox{\textbf{Seek help}}
+\begin{itemize}
+    \item[] If you have \textbf{any} questions or need \textbf{any} clarification at \textbf{any} point, please (1) come to office hours, (2) schedule an appointment to meet with me, or (3) post on the course discussion forum.
+    \item[]
+\end{itemize}
+
+\fbox{\textbf{Project options}}\\
+\vskip5pt
+\begin{minipage}{0.05\textwidth} \hspace{0.05in} \end{minipage}
+\begin{minipage}{0.05\textwidth} \hspace{0.05in} \end{minipage}
+\begin{minipage}{0.90\textwidth}
+\begin{itemize}
+    \item[\emph{Option 1}] Analyze an existing time to event data set.  Be sure to include a thorough citation/reference for the data set.
+    \item[\emph{Option 2}] Your team may also perform an experiment or survey to collect time-to-event data.  You may want to discuss your plan with your professor if you want to pursue this option.  The project may be more enjoyable and interesting if you collect your own data for a research question that interests you.
+     \item[]
+\end{itemize}
+\end{minipage}
+\begin{itemize}
+   \item[] How original is your data set?  I encourage some digging and research on your own to find a data set that is not already available in Minitab and \texttt{R}, and that has not been already examined in a textbook. You can improve your project grade by analyzing a data set that has not been introduced in other textbooks or that is not available in any statistical package. The investigation should be based on your group work, not a summary of work completed elsewhere.
+    \item[] \textbf{Note}: You cannot use a data set that has been introduced in class.
+    \item[]
+\end{itemize}
+
+\fbox{\textbf{Minimum data set requirements}}
+\begin{itemize}
+\item[] Regardless of the option selected, that data set must contain:
+\begin{enumerate}
+\item A time-to-event variable
+\item A censoring status indicator variable (right censoring only)
+\item One categorical (explanatory) variable
+\item One continuous (explanatory) variable
+\item At least one other explanatory variable
+\item The data set should contain enough observations to satisfy the following rule of thumb: 10 observations per explanatory variable in the original data set.
+\end{enumerate}
+\item[]
+\end{itemize}
+
+
+
+%\clearpage
+\fbox{\textbf{Writing guidelines}}
+\begin{itemize}
+       \item When writing a paragraph or summary, do not refer to variable names; instead, refer to the meaning of the variable.  For example, I might have a variable in data set called \texttt{prev\_stats} which indicates if a student has had previous experience with survival analysis prior to STAT 417.
+    \begin{itemize}
+        \item It would be \emph{incorrect} to write:
+        \item[] The percent of students with prev\_stats is 35\%.
+        \item It would be \emph{correct} to write:
+        \item[] The percent of students with previous experience in statistics is 35\%.
+    \end{itemize}
+    \item If you start a sentence with a number, you must spell it out.
+            \begin{itemize}
+        \item It would be \emph{incorrect} to write:
+        \item[] 64 people participated in the study.
+        \item It would be \emph{correct} to write:
+        \item[] Sixty-four people participated in the study.
+    \end{itemize}
+    \item When writing, round numbers (including $p$-values) to an appropriate number of decimal places.  (You don't need to worry about rounding in your R output.)
+        \begin{itemize}
+        \item It would be \emph{incorrect} to write:
+        \item[] The average weight is 130.2384638 pounds.
+        \item It would be \emph{correct} to write:
+        \item[] The average weight is 130.2 pounds.
+        \item An appropriate number of decimals to round a $p$-value is between 2 to 4 decimals.  For really small p-values you may write ``the $p$-value is less than 0.01'', if appropriate.
+    \end{itemize}
+    \item The length of the body of the report should be between 5 to 10 pages double-spaced (including graphs and tables). (Three to five pages single spaced is also acceptable.)  You can add on as many pages as you want in the Appendix.
+\item Please write clearly and coherently, using complete sentences in your report.
+\item  All graphs and tables should be directly inserted in the body of the report, not piled at the end. Appearance is important.
+  \item If you are using Rmarkdown, note that is does not automatically indicate misspelled words like Microsoft Word does.  In order to execute a spell check in RStudio, submit \keys{F7}. Please make sure you proof-read your writing carefully.
+  \item \textbf{Please submit your final report as a pdf.}  If you are compiling your report from Rmarkdown, you need to install \href{https://miktex.org/}{MikTex} in order to \emph{knit to pdf}.
+\item[]
+\end{itemize}
+
+\fbox{\textbf{Assessment}}\\
+\vskip3pt
+Please review rubrics associated with each phase on PolyLearn for full grading guidelines.
+\begin{itemize}
+\item Meeting the minimum requirements as outlined
+\item Correctness of your interpretations
+\item Originality of the data set used
+\item Organization and professional presentation of your complete report
+\item[]
+\end{itemize}
+
+%\clearpage
+\fbox{\textbf{Phase 1: Team selection}}
+\begin{itemize}
+    \item \textbf{Identify} 2 to 3 classmates to work with (groups should be of 3 to 4 students total).  Include their full name and e-mail address in the project submission.  If you need help finding a team, please let me know.  Include this information in your Phase 1 submission.  In addition, create  your group on PolyLearn by clicking on \keys{Select groups for project} in the Project content area of PolyLearn.
+    \item \textbf{Designate} one team member to be the primary contact person.
+    \begin{itemize}
+        \item This person is responsible for facilitating communication between team members.
+        \item This person is my primary contact in case I have questions for your team.
+    \end{itemize}
+    \item Create your team \textbf{contract}: state three things that you think makes a group work well together that you all agree to do.
+    \item[]
+\end{itemize}
+
+
+\fbox{\textbf{Phase 2: Data submission}}
+\begin{itemize}
+\item[] Submit the data set you plan to use for your project.  Include a brief description of the data set.  If you are pursuing \emph{Option 1} be sure to provide a full citation for the data origin.  If you are pursuing \emph{Option 2} be sure to provide the protocol used to collect the data.  Lastly, include brief descriptions of the variables in the data set (e. g., a data dictionary).  Please state which variables in your data set satisfy/correspond to the specifications listed in minimum data set requirements (both with variable names and descriptions).
+\item[] \textbf{Note:} Every group must work independently of each other - all groups must select a different data set.
+\item[]
+\end{itemize}
+
+
+%\clearpage
+\fbox{\textbf{Phase 3: Final report}}
+\begin{itemize}
+\item \textbf{Introduction}: Provide a brief description of the data set you have selected, i.e.
+the variables, how the study was conducted, and any other details you can provide. Be sure to define the time-to-event variable.
+\item \textbf{Descriptive Summaries}: Use nonparametric methods to describe and compare survival experiences of the different groups in your data set. Examine and comment on the survival experience of all individuals in your data set, as well as the survival experiences of different groups of individuals. Use graphical displays such as Kaplan-Meier curves, and/or estimated hazard curves, and perform and report results of the log-rank test. In addition, compute various descriptive statistics of interest.
+\item \textbf{Regression Analysis}: Develop a Cox regression model to investigate the effects of predictors (explanatory variables) on the hazard rate. You need only present your final model, including, but not limited to, parameter estimates, standard errors, and $p$-values. Discuss whether model assumptions have been met and whether you removed any influential or outlying cases.  Be sure to present the residual diagnostic plots to support your discussion.  Lastly, for some key values of
+the predictors, present estimated hazard ratios and confidence intervals for the corresponding true hazard ratio. Provide
+interpretations of the hazard ratios.
+\item \textbf{Discussion}: Based on the results in the main report, discuss some insightful discoveries about the time-to-event data.
+\item \textbf{Conclusion}: Summarize your most important findings.
+\item \textbf{Appendix}:  Include all \texttt{R} code used to conduct your
+analyses in the Appendix at the end of the report.
+\item[]
+\end{itemize}
+
+
+\fbox{\textbf{Phase 4: Peer evaluation}}
+\begin{itemize}
+    \item All team members are expected to contribute equally to the project.
+    \begin{itemize}
+    \item Two percent of your \emph{individual} project grade comes from \emph{completing} the peer evaluation form on PolyLearn.
+    \item  After peer evaluations are assessed by the instructor, an \emph{individual's} project grade may be adjusted by $\pm$ 20\% from the overall group grade.
+    \end{itemize}
+    \item
+    Here is how you will assess \textbf{yourself} and your peers:
+    \begin{itemize}
+    \item[] Rate the individual on the following attributes according to the scale
+    \item[] $1=$ Strongly disagree, $2=$ Disagree, $3=$ Agree, $4=$ Strongly agree
+    \begin{itemize}
+    \item Communicated well with group members (electronically or in person)
+    \item Willingly volunteered for or accepted assigned tasks
+    \item Contributed positively to group discussions with useful ideas
+    \item Completed work on time or made alternative arrangements
+    \item Did work accurately and completely
+    \item Contributed a fair share to the project
+    \item Overall was a valuable member of the team
+    \end{itemize}
+    \end{itemize}
+    \item[]
+\end{itemize}
+
+
+\end{document} 

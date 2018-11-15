@@ -1,0 +1,686 @@
+\input{"C:/Users/spileggi/Google Drive/STAT 417/Slides/SlideStyle.tex"}
+
+
+
+\title[Set 10]{Cox regression models with multiple predictors}
+\author[Pileggi]{Shannon Pileggi}
+
+\institute[STAT 417]{STAT 417}
+
+\date{}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{OUTLINE\qquad\qquad\qquad} \tableofcontents[hideallsubsections]
+\end{frame}
+
+
+%===========================================================================================================================
+\section[Multiple predictors]{Multiple predictors}
+%===========================================================================================================================
+\subsection{}
+
+\begin{frame}
+\frametitle{Cox regression with multiple predictors}
+When there are several predictors $X_1,X_2,\ldots,X_p$ that we believe are associated with hazard, then the CR model becomes:
+\vskip60pt
+Parameters are estimated by maximizing the partial (log) likelihood function and the fitted CR model is given by:
+\vskip60pt
+\end{frame}
+
+\begin{frame}
+\frametitle{Time invariant predictors}
+We will assume that the values of each predictor are measured on each individual at the beginning of the study and remain fixed over time - these are called \emph{time invariant predictors}.
+\begin{clicker}{For which of the following predictors is it reasonable to assume that they are \emph{time invariant}?  In a study of time to college graduation...}
+\begin{enumerate}
+\item high school GPA
+\item college GPA
+\item gender
+\item illegal drug use (yes/no)
+\item weight
+\end{enumerate}
+\end{clicker}
+\end{frame}
+
+\begin{frame}
+\frametitle{Proportionality assumption}
+\begin{clicker}{The proportionality assumption of the Cox regression model implies that for \textbf{two sets of values} of predictors, $\{x_1,...,x_p\}$ and $\{x_1^*,...,x_p^*\}$, ...}
+\begin{enumerate}
+\item the hazard ratio remains constant over time
+\item the difference between the hazards remains constant over time
+\item the ratio of log hazards remains constant over time
+\item the difference between the log hazards remains constant over time
+\end{enumerate}
+\end{clicker}
+\end{frame}
+
+\begin{frame}
+\frametitle{Interpretation of ${\beta}_j$'s and $e^{c\beta_j}$'s}
+\begin{itemize}
+\item[${\beta}_j$]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[$e^{c\beta_j}$]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG study with multiple predictors}
+Recall the lung cancer study, and consider the predictors:
+\begin{itemize}
+\item $X_1=$ Karnofsky score (quantitative)
+\item $X_2=$ Cancer treatment (0 = standard, 1 = test) (categorical)
+\end{itemize}
+\begin{enumerate}
+\item Write the form of the CR model with the two explanatory variables.
+\item[]
+\item[]
+\item[]
+\item Provide an interpretation for $\beta_1$.
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG study with multiple predictors, cont.}
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item Provide an interpretation for $e^{\beta_2}$.
+\end{enumerate}
+\vskip300pt
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG study with multiple predictors: hazard ratios}
+Set up the hazard ratios (in terms of $\beta$'s) for:
+\begin{enumerate}
+\item Patients taking the test treatment to patients taking the standard treatment (fixing Karnofsky score).
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item A ten point increase in Karnofsky score, fixing the treatment.
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG study with multiple predictors: hazard ratios}
+Set up the hazard ratios (in terms of $\beta$'s) for:
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item Patients taking the test treatment whose Karnofsky score is 10 points higher than patients taking the standard treatment.
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+\vskip200pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study with multiple predictors: R output}
+\begin{Rcode}{-.07}
+CR_mod1 <- coxph(Surv(time, status) ~ karno + trt, data = veteran)
+summary(CR_mod1)
+\end{Rcode}
+\vskip5pt
+\begin{Rout}{-.07}
+           coef exp(coef)  se(coef)      z Pr(>|z|)
+karno -0.033954  0.966616  0.005084 -6.679  2.4e-11 ***
+trt    0.177322  1.194016  0.183149  0.968    0.333
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+      exp(coef) exp(-coef) lower .95 upper .95
+karno    0.9666     1.0345    0.9570    0.9763
+trt      1.1940     0.8375    0.8339    1.7096
+\end{Rout}
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG study w/ mult. predictors: estimated hazard ratios}
+Compute and interpret estimated hazard ratios for:
+\begin{enumerate}
+\item Patients taking the test treatment to patients taking the standard treatment (fixing Karnofsky score).
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item A ten point increase in Karnofsky score, fixing the treatment.
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG study w/ mult. predictors: estimated hazard ratios}
+Compute and interpret estimated hazard ratios for:
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item Patients taking the test treatment whose Karnofsky score is 10 points higher than patients taking the standard treatment.
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+\vskip200pt
+\end{frame}
+
+%===========================================================================================================================
+\section[Inference ($\beta_i$)]{Inference ($\beta_i$)}
+%===========================================================================================================================
+\subsection{}
+\begin{frame}
+\tableofcontents[currentsection, hideallsubsections]
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Full R output}
+\begin{Rout}{.0}
+
+           coef exp(coef)  se(coef)      z Pr(>|z|)
+karno -0.033954  0.966616  0.005084 -6.679  2.4e-11 ***
+trt    0.177322  1.194016  0.183149  0.968    0.333
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+      exp(coef) exp(-coef) lower .95 upper .95
+karno    0.9666     1.0345    0.9570    0.9763
+trt      1.1940     0.8375    0.8339    1.7096
+
+Concordance= 0.712  (se = 0.03 )
+Rsquare= 0.269   (max possible= 0.999 )
+Likelihood ratio test= 42.97  on 2 df,   p=4.676e-10
+Wald test            = 44.66  on 2 df,   p=2.001e-10
+Score (logrank) test = 46.78  on 2 df,   p=6.933e-11
+\end{Rout}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hypothesis test for $\beta_j$}
+Test whether the predictor $X_j$ has a significant effect on hazard \textbf{when all other predictors are included in the model} with:
+\vskip70pt
+The Wald test statistic is:
+\vskip70pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study: Wald tests}
+Are treatment and Karnofsky score significant predictors of hazard?
+\begin{Rout}{-.07}
+           coef exp(coef)  se(coef)      z Pr(>|z|)
+karno -0.033954  0.966616  0.005084 -6.679  2.4e-11 ***
+trt    0.177322  1.194016  0.183149  0.968    0.333
+\end{Rout}
+\vskip200pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study: CI for HR}
+Construct and interpret a 95\% confidence interval for the population hazard ratio of patients on the test treatment to those on the standard treatment (for fixed Karnofsky score).
+\begin{Rout}{-.07}
+           coef exp(coef)  se(coef)      z Pr(>|z|)
+karno -0.033954  0.966616  0.005084 -6.679  2.4e-11 ***
+trt    0.177322  1.194016  0.183149  0.968    0.333
+\end{Rout}
+\vskip200pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study: CI for HR}
+Interpret the interval associated with Karnofsky score.
+\begin{Rout}{-.07}
+      exp(coef) exp(-coef) lower .95 upper .95
+karno    0.9666     1.0345    0.9570    0.9763
+trt      1.1940     0.8375    0.8339    1.7096
+\end{Rout}
+\vskip200pt
+\end{frame}
+
+%===========================================================================================================================
+\section[Inference ($\beta_i + \beta_j$)]{Inference ($\beta_i + \beta_j$)}
+%===========================================================================================================================
+\subsection{}
+\begin{frame}
+\tableofcontents[currentsection, hideallsubsections]
+\end{frame}
+
+\begin{frame}
+\frametitle{Inference for a linear combination of $\beta's$}
+The general form of the CI:
+\begin{eqnarray}
+\exp\left[c\hat{\beta}_j\pm z_{\alpha/2}|c|{SE}(\hat{\beta}_j)\right] \nonumber
+\end{eqnarray}
+The form of the true hazard ratio for patients taking the test treatment whose Karnofsky score is 10 points
+ higher than patients taking the standard treatment:
+\begin{eqnarray}
+HR = \exp[10\beta_1+\beta_2] \nonumber
+\end{eqnarray}
+How could we extend the above expression to this linear combination?
+\begin{enumerate}
+\item Which parts are straightforward?
+\item[]
+\item[]
+\item Which parts need care?
+\item[]
+\item[]
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{CI for a linear combination of $\beta's$}
+The $100(1-\alpha)\%$ CI for the $HR$ of the general form $e^{(a{\beta}_i+b{\beta}_j)}$ is given by:
+\vskip200pt
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Estimated variance-covariance matrix}
+\begin{Rcode}{.4}
+CR_mod1\textcolor{OrangeRed}{$var}
+\end{Rcode}
+\vskip5pt
+\begin{Rout}{.4}
+              [,1]          [,2]
+[1,]  2.584253e-05 -0.0001026675
+[2,] -1.026675e-04  0.0335433798
+\end{Rout}
+\vskip200pt
+\end{frame}
+
+\begin{frame}
+\frametitle{Estimated variance-covariance matrix}
+\begin{itemize}
+\item The estimated covariance between $\hat{\beta}_1$ and $\hat{\beta}_2$ is:
+\item[]
+\item[]
+\item[]
+% $\widehat{Cov}(\hat{\beta}_1,\hat{\beta}_2)=-.0001026675$
+\item The estimated variance of $\hat{\beta}_1$ is:
+\item[]
+\item[]
+\item[]
+%, $\hat{V}(\hat{\beta}_1)= .0000258$
+\item The estimated variance of $\hat{\beta}_2$ is:
+\item[]
+\item[]
+\item[]
+% $\hat{V}(\hat{\beta}_2)= .03354$
+\item The standard errors of $\hat{\beta}_1$ and $\hat{\beta}_2$ are:
+\item[]
+\item[]
+\item[]
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG study: CI for HR for linear combination of $\beta$'s}
+Compute the confidence interval for the population hazard ratio for patients taking the test treatment whose Karnofsky score is 10 points higher than patients taking the standard treatment. \\HR = $\exp[10\beta_1+\beta_2]$
+\vskip200pt
+\end{frame}
+
+
+%===========================================================================================================================
+\section[Overall tests]{Overall tests}
+%===========================================================================================================================
+\subsection{}
+\begin{frame}
+\tableofcontents[currentsection, hideallsubsections]
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Full R output}
+\begin{Rout}{.0}
+
+           coef exp(coef)  se(coef)      z Pr(>|z|)
+\textcolor{OrangeRed}{karno -0.033954  0.966616  0.005084 -6.679  2.4e-11 ***}
+trt    0.177322  1.194016  0.183149  0.968    0.333
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+      exp(coef) exp(-coef) lower .95 upper .95
+karno    0.9666     1.0345    0.9570    0.9763
+trt      1.1940     0.8375    0.8339    1.7096
+
+Concordance= 0.712  (se = 0.03 )
+Rsquare= 0.269   (max possible= 0.999 )
+Likelihood ratio test= 42.97  on 2 df,   p=4.676e-10
+\textcolor{OrangeRed}{Wald test            = 44.66  on 2 df,   p=2.001e-10}
+Score (logrank) test = 46.78  on 2 df,   p=6.933e-11
+\end{Rout}
+\end{frame}
+
+\begin{frame}
+\frametitle{Overall tests}
+What is different about the two highlighted lines?
+\vskip200pt
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Three tests}
+\hspace*{-0.3in}
+\begin{minipage}{0.55\textwidth}
+\begin{enumerate}
+\item Partial Likelihood Ratio Test:
+\item[] $\displaystyle \boxed{G_l=2\left[l_p({\boldmath \mbox{$\hat{\beta}$}})-l_p(\boldmath{0})\right]}$
+\item[]
+\item Wald Test:
+\item[] $\displaystyle \boxed{G_W={\boldmath\mbox{$\hat{\beta}$}}^T\mathbf{I}({\boldmath
+    \mbox{$\hat{\beta}$}}){\boldmath \mbox{$\hat{\beta}$}}}$
+\item[]
+\item Score Test:
+\item[] $\displaystyle \boxed{G_S=\mathbf{u}^T(\mathbf{0})[\mathbf{I}(\mathbf{0})]^{-1}\mathbf{u}(\mathbf{0})}$
+\item[]
+\item[] All three test statistics ($G_l$, $G_W$, $G_S$) follow a $\chi^2$-distribution with $p$ degrees of freedom.
+\end{enumerate}
+\end{minipage}
+\blankcolumn
+\begin{minipage}{0.40\textwidth}
+Details:
+\begin{itemize}
+\item $l_p({\boldmath\mbox{$\beta$}})$ is the log partial likelihood function
+\item $\mathbf{I}({\boldmath \mbox{${\beta}$}})$ is the observed information matrix 
+\item $\mathbf{0}=(0,0,\ldots,0)^T$ is a $p$-vector of 0's
+\item $\mathbf{u}^T(\mathbf{0})$ is the vector of partial
+    derivatives of the log partial likelihood function (also called a
+    vector of scores) evaluated at ${\boldmath
+    \mbox{${\beta}$}}=\mathbf{0}$
+\end{itemize}
+\end{minipage}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study: interpret the results}
+\begin{Rout}{.0}
+Likelihood ratio test= 42.97  on 2 df,   p=4.676e-10
+Wald test            = 44.66  on 2 df,   p=2.001e-10
+Score (logrank) test = 46.78  on 2 df,   p=6.933e-11
+\end{Rout}
+\vskip200pt
+\end{frame}
+
+\begin{frame}
+\frametitle{Partial likelihood ratio test}
+\begin{itemize}
+\item[$l_p({\boldmath \mbox{$\hat{\beta}$}})$ = ] log partial likelihood function evaluated at the parameter estimates (measures of goodness-of-fit of the CR model to the data when the predictors $X_1,X_2,\ldots,X_p$ are included)
+\item[$l_p(\boldmath{0})$ = ] log partial likelihood function evaluated at 0 values (measures of the fit of the \textit{null model}, i.e. a CR model with no predictors and consisting of only the baseline hazard function)
+\item[]
+\item If $l_p({\boldmath \mbox{$\hat{\beta}$}})$ is ``much larger" than $l_p(\boldmath{0})$, then:
+\item[]
+\item[]
+\item[]
+\item The partial likelihood ratio test statistic compares $l_p({\boldmath \mbox{$\hat{\beta}$}})$ to $l_p(\boldmath{0})$:
+\item[]
+\item[]
+\item[]
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Log partial likelihoods in \texttt{R}}
+\begin{minipage}{0.43\textwidth}
+\begin{Rcode}{.0}
+CR_mod1\textcolor{OrangeRed}{$loglik}
+\end{Rcode}
+\begin{Rout}{.0}
+[1] -505.4491 -483.9657
+\end{Rout}
+\end{minipage}
+\blankcolumn
+\blankcolumn
+\begin{minipage}{0.45\textwidth}
+\begin{itemize}
+\item[]
+\item[]
+\item[]
+\item[]
+\item[$l_p(\boldmath{0})$ = ] left value (-505.4491)
+\item[$l_p({\boldmath \mbox{$\hat{\beta}$}})$ = ] right value (-483.9657)
+\end{itemize}
+\end{minipage}\\
+\vskip10pt
+Verify that the partial likelihood ratio statistic is $G_l=42.97$.
+\vskip200pt
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{$p$-values from $\chi^2$ distribution in \texttt{R}}
+\begin{Rcode}{.25}
+pchisq(q = 42.97, df = 2, lower.tail = F)
+\end{Rcode}
+\begin{Rout}{.25}
+4.668561e-10
+\end{Rout}
+\vskip200pt
+\end{frame}
+
+%===========================================================================================================================
+\section[Dummy variables]{Dummy variables}
+%===========================================================================================================================
+\subsection{}
+\begin{frame}
+\tableofcontents[currentsection, hideallsubsections]
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Categorical predictors with $>2$ levels}
+\begin{itemize}
+\item To include a categorical predictor with $k$ levels (i.e. $k$ different possible values) into the CR model, a set of $k$ \textbf{dummy variables}, $D_1,D_2,\ldots,D_k$, must be created to ``represent" the different values that $X$ can take.
+\end{itemize}
+\vskip200pt
+\end{frame}
+
+\begin{frame}
+\frametitle{Categorical predictors with $>2$ levels}
+Write out the dummy variables required for a CR model for the VALCG lung caner study with the categorical predictor $X=$ \textit{cancer cell type} (\textbf{small cell}, \textbf{squamous}, \textbf{large cell}, and \textbf{adenocarcinoma}).
+\vskip200pt
+\end{frame}
+
+\begin{frame}
+\frametitle{Using dummy variables in the model}
+\begin{itemize}
+\item Use $k-1$ dummy variables in your model:
+\item[]
+\item[]
+\item[]
+\item[]
+\item For our lung cancer model, this is:
+\item[]
+\item[]
+\item[]
+\item[]
+\item The $k^{th}$ dummy variable omitted corresponds to the \textbf{reference cell}.  The results for all other groups are compared relative to the $k^{th}$ value.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Dummy variables in \texttt{R}}
+\begin{itemize}
+\item \texttt{R} automatically creates dummy variables for you! If your categorical variable is:
+\begin{itemize}
+\item \emph{character}: you do not need to use \texttt{as.factor()} (but it won't hurt anything).
+\item \emph{numeric}: you \textbf{must} use \texttt{as.factor()} to create the dummy variables.
+\end{itemize}
+\item[]
+\item \texttt{R} also automatically assigns the \textbf{reference} group for you:
+\begin{itemize}
+\item \emph{character}: first alphabetical value is the reference group
+\item \emph{numeric}: first numeric value is the reference group
+\end{itemize}
+\item[] You can change the reference group in \texttt{R}.
+\end{itemize}
+\begin{Rcode}{-.05}
+CR_mod2 <- coxph(Surv(time, status) ~ celltype, data = veteran)
+summary(CR_mod2)
+\end{Rcode}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+Recall that \texttt{celltype} takes on values of: \\ 
+\texttt{adeno}, \texttt{large}, \texttt{smallcell}, and \texttt{squamous}. 
+\begin{Rout}{-.05}
+                     coef exp(coef) se(coef)      z Pr(>|z|)
+celltypelarge     -0.9176    0.3995   0.2880 -3.186  0.00144 **
+celltypesmallcell -0.1465    0.8638   0.2493 -0.587  0.55687
+celltypesquamous  -1.1477    0.3174   0.2929 -3.919  8.9e-05 ***
+\end{Rout}
+\begin{clicker}{What is the reference group?}
+\begin{enumerate}
+\item \texttt{adeno}
+\item \texttt{large}
+\item \texttt{smallcell}
+\item \texttt{squamous}
+\end{enumerate}
+\end{clicker}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+Write out the estimated Cox regression model.
+\begin{Rout}{-.05}
+                     coef exp(coef) se(coef)      z Pr(>|z|)
+celltypelarge     -0.9176    0.3995   0.2880 -3.186  0.00144 **
+celltypesmallcell -0.1465    0.8638   0.2493 -0.587  0.55687
+celltypesquamous  -1.1477    0.3174   0.2929 -3.919  8.9e-05 ***
+\end{Rout}
+\vskip200pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+\begin{clicker}{What is the interpretation of $\hat{\beta_1} = -0.9176$?  The \underline{\hspace{0.2in}{1}\hspace{0.2in}} of death for patients with \underline{\hspace{0.2in}{2}\hspace{0.2in}} lung cancer is estimated to be 0.92 \underline{\hspace{0.2in}{3}\hspace{0.2in}} than the \underline{\hspace{0.2in}{4}\hspace{0.2in}} of death for patients with \underline{\hspace{0.2in}{5}\hspace{0.2in}}.}
+\begin{enumerate}
+\item hazard, log hazard, hazard ratio
+\item \texttt{adeno}, \texttt{large}, \texttt{smallcell}, \texttt{squamous}
+\item lower, higher, times
+\item hazard, log hazard, hazard ratio
+\item \texttt{adeno}, \texttt{large}, \texttt{smallcell}, \texttt{squamous}
+\end{enumerate}
+\end{clicker}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+\begin{Rout}{-.05}
+                     coef exp(coef) se(coef)      z Pr(>|z|)
+celltypelarge     -0.9176    0.3995   0.2880 -3.186  0.00144 **
+celltypesmallcell -0.1465    0.8638   0.2493 -0.587  0.55687
+celltypesquamous  -1.1477    0.3174   0.2929 -3.919  8.9e-05 ***
+\end{Rout}
+\begin{clicker}{Identify two sets of two groups of cancers that appear to have a similar effect on hazard.  Classify these sets as ``better off'' or ``worse off''.}
+\begin{itemize}
+\item[]
+\item[Set 1:] \hspace{0.2in} \texttt{adeno} \hspace{0.2in} \texttt{large} \hspace{0.2in} \texttt{smallcell} \hspace{0.2in} \texttt{squamous}
+\item[]
+\item[Set 2:] \hspace{0.2in} \texttt{adeno} \hspace{0.2in} \texttt{large} \hspace{0.2in} \texttt{smallcell} \hspace{0.2in} \texttt{squamous}
+\item[]
+\end{itemize}
+\end{clicker}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+\begin{Rout}{-.05}
+                  exp(coef) exp(-coef) lower .95 upper .95
+celltypelarge        \textcolor{OrangeRed}{0.3995}      2.503    0.2272    0.7025
+celltypesmallcell    0.8638      1.158    0.5299    1.4080
+celltypesquamous     0.3174      3.151    0.1788    0.5634
+\end{Rout}
+What is the interpretation of 0.3995?
+\vskip200pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+\begin{Rout}{-.05}
+                  exp(coef) exp(-coef) lower .95 upper .95
+celltypelarge        0.3995      2.503    0.2272    0.7025
+celltypesmallcell    0.8638      1.158    \textcolor{OrangeRed}{0.5299}    \textcolor{OrangeRed}{1.4080}
+celltypesquamous     0.3174      3.151    0.1788    0.5634
+\end{Rout}
+What is the interpretation of the interval 0.5299 - 1.4080?
+\vskip200pt
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+\begin{Rout}{-.05}
+                     coef exp(coef) se(coef)      z Pr(>|z|)
+celltypelarge     -0.9176    0.3995   0.2880 -3.186  0.00144 **
+celltypesmallcell -0.1465    0.8638   0.2493 -0.587  0.55687
+celltypesquamous  -1.1477    0.3174   0.2929 -3.919  8.9e-05 ***
+\end{Rout}
+Estimate how many times higher (or percentage points lower) the hazard rate is for patients with small cell cancer than patients with large cell cancer.
+\vskip200pt
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+\begin{Rout}{-.05}
+                     coef exp(coef) se(coef)      z Pr(>|z|)
+celltypelarge     -0.9176    0.3995   0.2880 -3.186  0.00144 **
+celltypesmallcell -0.1465    0.8638   0.2493 -0.587  0.55687
+celltypesquamous  -1.1477    0.3174   0.2929 -3.919  8.9e-05 ***
+\end{Rout}
+What is the general approach to construct a CI for the population hazard ratio for patients with small cell cancer relative to patients large cell cancer?
+\vskip200pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG study - CR model with \texttt{celltype}}
+\begin{Rout}{-.05}
+                     coef exp(coef) se(coef)      z Pr(>|z|)
+celltypelarge     -0.9176    0.3995   0.2880 -3.186  0.00144 **
+celltypesmallcell -0.1465    0.8638   0.2493 -0.587  0.55687
+celltypesquamous  -1.1477    0.3174   0.2929 -3.919  8.9e-05 ***
+...
+Likelihood ratio test= 24.85  on 3 df,   p=1.661e-05
+Wald test            = 24.09  on 3 df,   p=2.387e-05
+Score (logrank) test = 25.51  on 3 df,   p=1.208e-05
+\end{Rout}
+Is type of cancer associated with hazard of death?
+\vskip200pt
+\end{frame}
+
+
+\end{document} 

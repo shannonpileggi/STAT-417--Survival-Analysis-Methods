@@ -1,0 +1,98 @@
+---
+title: "Lab 6"
+author: "Your name"
+date: "February 27, 2018"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+
+```{r}
+library(survival)
+```
+
+# The data
+
+Recall the `Rearrest.txt` data which contains the following variables:
+
+Variable  | Meaning
+--------- |-----------------------------------------------
+`months`  | time (in months) from prison release to re-arrest
+`censor`  | the censoring status indicator variable
+`personal`| `personal=1` if former inmate had a history of person-related crimes  (i.e. those with one or more convictions for offenses such as aggravated assault or kidnapping), and 0 otherwise.
+`property`|  `property=1` if former inmate was convicted of a property-related crime, 0 otherwise.
+`cenage`  | the "centered"" age of individual, i.e. the difference between the age of the individual upon release and the average age of all inmates in the study. For example, a subject with value 8.3 for `cenage` is at the time of release, 8.3 years older than the average age of all former inmates.
+
+To import the data set, use `read.table`.
+
+```{r, eval = F}
+rearrest <- read.table("FILE PATH/Rearrest.txt", header = TRUE)
+```
+
+
+
+# Question 1
+
+## Question 1a
+*Consider fiting a Cox regression model to the `rearrest` data with one categorical predictor of `property` (you don't need to do it yet).  Should we use `as.factor()` on the `property` variable?  Why or why not?*
+
+
+
+## Question 1b
+*Fit the Cox regression model to the `rearrest` data with one categorical predictor of `property`.  Report and interpret the parameter estimate $\hat{\beta}$ in the context of the problem.*
+
+
+## Question 1c
+*Find and interpret (in context) the hazard ratio comparing former inmates who did and did not commit property related crimes.*
+
+
+
+## Question 1d
+*Report the 95% confidence interval for $\beta$ and interpret it in conxtext.*
+
+
+
+## Question 1e
+*Report the 95% confidence interval for the $HR$ and interpret it in conxtext.*
+
+
+
+## Question 1f
+*Conduct the Wald test at the $\alpha=0.05$ level of significance to dtermine if the risk of re-arrest differs for former inmates who did and did not commit property related crimes.  Be sure to report the test statistic and the $p$-value, and state a conclusion in context.*
+
+
+
+## Question 1g 
+*If we assume that the "proportional hazards" condition is satisfied, briefly explain what that means in the context of this problem.*
+
+
+
+
+
+
+
+# Question 2
+
+## Question 2a 
+*Fit a one predictor Cox regression model to the \texttt{rearrest} data with the quantitative predictor `cenage`. Report and interpret the parameter estimate $\hat{\beta}$ in the context of the problem.*
+
+
+## Question 2b 
+*Find and **carefully** interpret (in context) the hazard ratio corresponding to a one year increase in `cenage`.*
+
+
+## Question 2c 
+*Compute and interpret the hazard ratio corresponding to a 5 year increase in `cenage`.*
+
+
+## Question 2d
+*Conduct the Wald test at the $\alpha=0.05$ level of significance to dtermine if the risk of re-arrest is associated with `cenage`.  Be sure to report the test statistic and the $p$-value, and state a conclusion in context.*
+

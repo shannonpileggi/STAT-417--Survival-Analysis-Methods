@@ -1,0 +1,107 @@
+---
+title: "Lab 7"
+author: "Your name"
+date: "March 8, 2018"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+
+```{r}
+library(survival)
+```
+
+# The data
+
+The *UMass Aids Research Unit IMPACT (UIS) Study* was a 5-year project (1989-1994) consisting of two concurrent randomized trials of residential treatment for drug abuse. The purpose of the study was to compare treatment programs of various durations designed to reduce drug abuse and to prevent high-risk HIV behavior. Six hundred twenty-eight participants were randomly assigned to two different treatment program sites, 444 assigned to Site A and 184 to Site B. Clients at Site A participated in a 3 or 6 month program that incorporated health education and relapse prevention, and clients at Site B participated in a 6 or 12 month community program that involved a structured life-style in a communal setting. The time-to-event random variable `TIME` measures the days until drug relapse from admission to the treatment program. There is complete information on 575 subjects. The data set name is `uissurv.txt`.
+
+Variable | Description
+---------|--------------------------------------------
+ID       | Identification Code (1 - 628)
+AGE      | Age at Enrollment  (Years)
+BECKTOTA | Beck Depression Score (0 - 54, higher scores indicate more depressed)
+HC       | Heroin/Cocaine Use During 3 Months Prior to Admission (1 = Heroin & Cocaine, 2 = Heroin Only, 3 = Cocaine Only, 4 = Neither Heroin nor Cocaine)
+IVHX     | History of IV Drug Use (1 = Never, 2 = Previous, 3 = Recent)
+NDRUGTX  | Number of Prior Drug Treatments (0 - 40)
+RACE     | Subject's Race (0 = White, 1 = Non-White)
+TREAT    | Treatment Randomization Assignment (0 = Short, 1 = Long)
+SITE     | Treatment Site (0 = A, 1 = B)
+LOS      | Length of Stay in Treatment (Days)
+TIME     | Time to Drug Relapse since admission date (Days)
+CENSOR   | Censoring status (1 = Returned to Drugs, 0 = Censored)
+
+To import the data set, use `read.table`.
+
+```{r, eval = F}
+uissurv <- read.table("FILE PATH/uissurv.txt", header = TRUE)
+```
+
+
+# Question 1
+
+*Fit a Cox regression model with the predictors `AGE` and `HC` and view a `summary` of the results.  (Make sure that `as.factor()` is applied, if appropriate.)*
+
+
+
+# Question 2
+*Are `HC` and `AGE` time invariant predictors?  Why or why not?*
+
+
+
+# Question 3
+*In examining the `HC` variable, what is the reference group?*
+
+
+
+# Question 4
+*Write out the both the population and the estimated Cox regression model.*
+
+
+
+# Question 5
+*Controlling for age, estimate how much higher (or lower) the risk of drug relapse is for someone who has only used heroin compared to someone who has used both heroin and cocaine.*
+
+
+
+# Question 6
+*Controlling for heroin and cocaine use, estimate how much higher (or lower) the risk of drug relapse is for each additional year in age.*
+
+
+
+# Question 7
+*Interpret the confidence interval (0.5419,0.9430) in the output.*
+
+
+
+# Question 8
+*Write out the form of the true hazard ratio that compares the risk of drug relapse for a 50 year old who has only used heroin to someone who is 45 and has used both heroin and cocaine (leave your answer in terms of the beta's).*
+
+
+
+# Question 9
+*Compute the estimated hazard ratio for Question 8.*
+
+
+
+
+# Question 10
+*Compute the confidence interval for the population hazard ratio in Question 8.*
+
+
+
+# Question 11
+*Taken together, are the predictors `HC` and `AGE` associated with hazard at the $\alpha = 0.05$ level of significance?  Cite the test-statistic and $p$-value, and state a conclusion in the context of the question.*
+
+
+
+# Question 12
+*Verify the computation of the partial likelihood ratio statistic ($G_l=14.05$) by using the log partial likelihood functions evaluated at the parameter estimates and at 0.*
+

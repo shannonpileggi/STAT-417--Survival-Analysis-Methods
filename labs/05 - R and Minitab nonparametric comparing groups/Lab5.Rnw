@@ -1,0 +1,139 @@
+\documentclass{article}
+
+\input{"C:/Users/spileggi/Google Drive/STAT 217/Labs/labStyleNew.tex"}
+
+
+\begin{document}
+
+\section*{Lab 5}
+
+\begin{enumerate}
+%=====================================================================
+\item Do the chocolate chip melting activity as a class! Submit your responses to the link on PolyLearn by Lab 5.
+%=====================================================================
+\item \fbox{\texttt{R}} The text file \hlstd{Graduate.txt} folder contains the time (in
+years) that 1000 students (472 males and 528 females) took to
+graduate (obtain a bachelor's degree) from college (measured from
+the time they entered a post-secondary institution, i.e. either a
+junior college or four year degree granting institution).  The
+\hlstd{Gender} column contains the gender of each student (\hlstd{0 = male}, \hlstd{1 = female}), and
+\hlstd{Censor} contains the values of the censoring status
+variable. 
+%---------------------------------------------------------------------
+\begin{enumerate}
+\item
+Save the data to your computer and read the data into \texttt{R}.  Here is an example command you can use.  \emph{No written response required.}
+<<import-demo, eval=FALSE, tidy=FALSE>>=
+graduate <- read.table("FILE PATH/Graduate.txt", header = TRUE)
+@
+  
+%<<import, eval=TRUE, tidy=FALSE>>=
+%library(survival)
+%graduate <- read.table("C:/Users/spileggi/Google Drive/STAT 417/Data sets/Graduate.txt", 
+%                       header = TRUE)
+%head(graduate)
+%@
+%---------------------------------------------------------------------
+\item Construct Kaplan-Meier estimates to compare the ``survival" experiences among male and female college students (i.e., create the \hlstd{KM\_obj}).  Plot the Kaplan-Meier estimates to compare the ``survival" experiences in the samples of male and female college students by the method of your choice.  Comment on what you observe in the survival curves.
+\item[]
+\item[]
+\item[]
+\item[]
+%<<KMest, eval=TRUE, tidy=FALSE>>=
+%KM_obj <- survfit(Surv(Years, Censor) ~ Gender, 
+%                  data = graduate)
+%@
+%---------------------------------------------------------------------
+%<<KMplots, eval=TRUE, tidy=FALSE>>=
+%library(survminer)
+%ggsurvplot(KM_obj, data = graduate, risk.table = TRUE)
+%@
+%\item[] \ans{It appears that females tend to graduate sooner than males.}
+%---------------------------------------------------------------------
+\item
+Report the median "survival" time by gender.
+\item[]
+\item[]
+\item[]
+\item[]
+%<<KMview, eval=TRUE, tidy=FALSE>>=
+%KM_obj 
+%@
+%---------------------------------------------------------------------
+\item 
+Obtain the Kaplan-Meier estimates of survival probabilities by gender.  Report the estimated probabilities that time to graduate exceeds 4 years for both males and females.
+\item[]
+\item[]
+\item[]
+\item[]
+%<<KMsum, eval=TRUE, tidy=FALSE>>=
+%summary(KM_obj) 
+%@
+%\item[] \ans{Males: $\hat{S}(4) = 0.689$}
+%\item[] \ans{Females: $\hat{S}(4) = 0.591$}
+%---------------------------------------------------------------------
+\item State the null and alternative hypotheses in words and using symbols to compare the overall survival experiences of males and females.
+\item[]
+\item[]
+\item[]
+\item[]
+%\item[] \ans{$H_0: S_1(t)=S_2(t)$ for all $t$.  The probability of not graduating after any time $t$ is the same for %males and females.}  
+%\item[] \ans{$H_a: S_1(t) \neq S_2(t)$ for some $t$. The probability of not graduating after any time $t$ differs for %males and females for some time $t$.}
+%---------------------------------------------------------------------
+\clearpage
+\item Perform the log-rank test to compare the ``survival" experiences of the population of male and female college students.  Be sure to report the value of the test statistic and the $p$-value.  State a conclusion in the context of the problem, using a significance  level of $\alpha = 0.05$.
+\item[]
+\item[]
+\item[]
+\item[]
+%<<LRtest, eval=TRUE, tidy=FALSE>>=
+%survdiff(Surv(Years, Censor) ~ Gender, 
+%                  data = graduate)
+%@
+%\item[] \ans{$\chi_l^2=6.1$ and the $p$-value=.0135. At the 0.06 level, we have evidence that the probability of not %graduating does differ at some time $t$ among males and females.  We have evidence that time to graduate is associated %with gender.}
+\end{enumerate}
+
+%=====================================================================
+\item \fbox{\texttt{Minitab}} Locate the Minitab file \texttt{Melt Times Lab 5 W2018} on PolyLearn. We are interested in comparing the ``survival" experiences of milk chocolate and white chocolate chips.
+%---------------------------------------------------------------------
+\begin{enumerate}
+\item Briefly describe the two populations of interest relevant to this (pseudo) experiment.
+\item[]
+\item[]
+\item[]
+\item[]
+%\item[] \ans{Population 1: All milk chocolate chips.}
+%\item[] \ans{Population 2: All white chocolate chips.}
+%---------------------------------------------------------------------
+\item State the null and alternative hypotheses in words and using symbols to compare the survival experiences of the two appropriate populations described.
+\item[]
+\item[]
+\item[]
+\item[]
+%\item[] \ans{$H_0: S_1(t)=S_2(t)$ for all $t$.  The probability of not melting after any time $t$ does not depend on %the type of chip, i.e. whether it is milk or white chocolate.}
+%\item[] \ans{$H_A: S_1(t) \neq S_2(t)$ for some $t$. The probability of not melting after any time $t$ does depend on %the type of chip, i.e. whether it is milk or dark chocolate.}
+%---------------------------------------------------------------------
+\item Plot the Kaplan-Meier curves for both the milk chocolate and white chocolate melting times.  In the context of the problem, compare the survival experiences of the two samples of chips. Does there appear to be any observed differences in the survival experiences?
+\item[]
+\item[]
+\item[]
+\item[]
+%---------------------------------------------------------------------
+\item Report the median event time (if available) for each type of chip to melt, and comment on which type of chip tends to melt faster.
+\item[]
+\item[]
+\item[]
+\item[]
+%---------------------------------------------------------------------
+\item Conduct the log-rank and Wilcoxon tests at the .05 significance level (the output for both tests follows the Kaplan-Meier results in the Session Window).  Be sure to report the values of the test statistics and $p$-values, and state a conclusion in the context of the problem.  If the results of the tests disagree, attempt to explain why.
+\item[]
+\item[]
+\item[]
+\item[]
+
+\end{enumerate}
+
+
+\end{enumerate}
+
+\end{document}

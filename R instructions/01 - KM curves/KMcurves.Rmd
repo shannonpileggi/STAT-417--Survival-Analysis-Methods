@@ -1,0 +1,221 @@
+---
+title: "Non-parametric survival methods in R: single group"
+author: "Shannon Pileggi"
+date: "February 9, 2018"
+output: 
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.width=5, fig.height=3) 
+```
+
+# Getting started
+
+1. Install the `survival` package.  This can be done through `Packages` -> `Install` or with
+
+```{r, eval = F}
+install.packages("survival")
+```
+
+This should only need to be done once on your personal computer; you may or may not need to do this for each session on the library computers.
+
+2. Load the `survival` package.
+
+
+```{r, eval = T}
+library(survival)
+```
+
+# Basic survival
+
+## Create a survival object
+
+A survival object consists of two vectors:
+
+ + time to event
+
+ + censoring status
+ 
+For example, suppose we have the following 7 motorist reaction times:
+ 
+  `1.41 1.41+ 2.76+ 3.56 4.18 4.71+ 13.18`
+  
+From this, we can construct a vector of times and a vector with the censoring status (1 = complete, 0 = right-censored).  In this case, I will create the vectors in  a data frame.
+
+**Note:**  You do **not** need to do this `data.frame` step if you have imported the data as a data frame with a command like `read.csv` or `read.table`.  This was only used to construct a data set from "raw" data.
+
+```{r}
+motorists <- data.frame(time = c(1.41, 1.41, 2.76, 3.56, 4.18, 4.71, 13.18),
+                        censor = c(1, 0, 0, 1, 1, 0, 1))
+motorists
+```
+
+
+A survival object uses the `Surv` function to combine the `time` and `censor` vectors.
+
+```{r}
+motorists_surv <- Surv(motorists$time, motorists$censor)
+```
+
+## Obtain Kaplan-Meier estimates
+
+Use the `survfit` function on your survival object to obtain Kaplan-Meier estimates.  Here, we are using modeling syntax where `~ 1` represents that we are creating an intercept only model.
+```{r}
+KM_obj <- survfit(motorists_surv ~ 1, 
+                  conf.type = "none")
+```
+
+Then produce a summary of your Kaplan-Meier object with the `summary` function.
+```{r}
+summary(KM_obj)
+```
+
+You can also get additional information from your Kaplan-Meier object just by submitting the name of the object - this give the sample size, the number of events, and the estimated median survival time.
+```{r}
+KM_obj
+```
+
+## Create a survival object when you obtain KM estimates
+
+You don't have to first specify the survival object and then use `survfit` - this can be done in one step as:
+
+```{r}
+KM_obj <- survfit(Surv(time, censor) ~ 1, 
+                  data = motorists, 
+                  conf.type = "none")
+
+summary(KM_obj)
+```
+
+## Plotting
+
+### base R
+
+To plot the Kaplan-Meier curve, just execute the `plot` function on the `KM_obj`.
+
+```{r}
+plot(KM_obj,
+     xlab = "Seconds", 
+     ylab = "Survival Probability", 
+     main = "KM Curve with Confidence Limits")
+```
+
+
+### ggsurvplot
+
+To use a `gg` version of survival plotting, install the `survminer` package and use the `ggsurvplot` function.  Note that this function has many options, including whether or not to plot confidence intervals (`conf.int`) or the risk table (`risk.table`).  Note that I received an error in `ggsurvplot` when I had `conf.type = "none"` in my `KM_obj`, but when I set `conf.type = "plain"` I no longer received an error.
+
+```{r, message = FALSE}
+library(survminer)
+```
+
+```{r, fig.height=5}
+KM_obj <- survfit(Surv(time, censor) ~ 1, 
+                  data = motorists, 
+                  conf.type = "plain")
+
+ggsurvplot(KM_obj, data = motorists, conf.int = FALSE, risk.table = TRUE)
+```
+
+## Confidence limits
+
+For `conf.type`:
+
+ + `none` omits confidence intervals
+
+ + `plain` computes standard confidence intervals
+ 
+ + `log-log` computes confidence intervals based on the log-log transformation
+  
+  
+Plotting a Kaplan-Meier object that specified confidence limits will automatically plot the confidence limits.
+
+```{r}
+KM_obj <- survfit(Surv(time, censor) ~ 1, 
+                  data = motorists, 
+                  conf.type = "plain")
+
+summary(KM_obj)
+
+plot(KM_obj,
+     xlab = "Seconds", 
+     ylab = "Survival Probability", 
+     main = "KM Curve with Confidence Limits")
+```
+
+## Nelson-Aelen Estimator of $S(t)$
+
+Use the option `type = "fh"` in the `survfit` function to compute Nelson-Aalen estimates of survival probabilities.
+```{r, include = F}
+source("C:/Users/spileggi/Google Drive/STAT 417/plot.haz.R")
+```
+
+
+```{r}
+KM_obj_NA <- survfit(Surv(time, censor) ~ 1, 
+                     data = motorists, 
+                     type = "fh",
+                     conf.type = "none")
+
+summary(KM_obj_NA)
+
+plot(KM_obj_NA,
+     xlab = "Seconds", 
+     ylab = "Survival Probability", 
+     main = "S(t) estimated by Nelson-Aelen")
+```
+
+# Hazard / Cumulative Hazard
+
+## Overview
+
+There are not any built in functions in the `survival` package that plot the estimated hazard rates or cumulative hazards.  Two supplemental `R` functions have been written to plot the the Kaplan-Meier estimated hazard function and the Nelson-Aalen cumulative hazard function.  The `plot.haz.R` script in the PolyLearn `Data sets` folder contains two functions:
+
++ `plot_haz` plots the Kaplan-Meier estimated hazard function $\hat{h}(t)$
+
++ `plot_chaz` plots the Nelson-Aalen estimated cumulative hazard function $\tilde{H}(t)$
+
+## Accessing the functions
+
+1.  Download the R script `plot.haz.R` from PolyLearn and open it in RStudio.
+
+2.  With this file open, click on `Source`.
+
+3.  Now you should be able to see the two functions `plot_haz` and `plot_chaz` in your `Environment`.
+
+4.  To include the source code in an R script or Rmarkdown file:
+
++ Click on `History` in the upper right hand corner of RStudio.
+
++ Scroll down until you see the line of code that begins with `source`.  Click on ths line of code.  For example:
+
+```{r, eval=F}
+source("C:/Users/spileggi/Google Drive/STAT 417/plot.haz.R")
+```
+
++ Once that line of code is highlighted, click on `To source` and the R code should now appear in your upper left-hand panel.  If you are working in an Rmarkdown file (.Rmd), be sure to place this code in a code chunk.
+
+## Plotting
+
+Both functions can be applied to an object created by `survifit`.
+
+
+```{r}
+KM_obj <- survfit(Surv(time, censor) ~ 1, 
+                  data = motorists, 
+                  conf.type = "none")
+
+plot_haz(KM_obj)
+
+plot_chaz(KM_obj)
+
+```
+

@@ -1,0 +1,144 @@
+\PassOptionsToPackage{subsection=false}{beamerouterthememiniframes}
+\PassOptionsToPackage{dvipsnames,table}{xcolor}
+\documentclass[fleqn]{beamer}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{amsmath,amsfonts,amsthm,amsopn}
+\usepackage{color, colortbl}
+\usepackage{subfig}
+\usepackage{wrapfig}
+\usepackage{fancybox}
+\usepackage{tikz}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{movie15}
+\usepackage{pifont}
+\usepackage{soul}
+\usepackage{fancyvrb,newverbs}
+\usepackage{epsfig}
+\usepackage{epstopdf}
+\fvset{fontsize=\footnotesize}
+\RecustomVerbatimEnvironment{verbatim}{Verbatim}{}
+
+%\usepackage{fancybox}
+
+\usetheme{Szeged}
+\usecolortheme{default}
+
+%\definecolor{links}{HTML}{2A1B81}
+%\definecolor{links}{blue!20}
+\hypersetup{colorlinks,linkcolor=,urlcolor=blue!80}
+
+\setbeamertemplate{blocks}[rounded]
+\setbeamercolor{block title}{bg=blue!40,fg=black}
+\setbeamercolor{block body}{bg=blue!10}
+
+
+\newenvironment<>{clicker}[1]{%
+  \begin{actionenv}#2%
+      \def\insertblocktitle{#1}%
+      \par%
+      \mode<presentation>{%
+        \setbeamercolor{block title}{fg=white,bg=magenta}
+       \setbeamercolor{block body}{fg=black,bg=magenta!10}
+       \setbeamercolor{itemize item}{fg=magenta}
+       \setbeamertemplate{itemize item}[triangle]
+       \setbeamercolor{enumerate item}{fg=magenta}
+     }%
+      \usebeamertemplate{block begin}}
+    {\par\usebeamertemplate{block end}\end{actionenv}}
+
+%\newcommand{\bmp}{\begin{minipage}}
+%\newcommand{\emp}{\end{minipage}}
+%\newcommand{\blankcolumn}{\bmp{.05\textwidth}\hspace{0.50in} \emp}
+
+\defbeamertemplate*{footline}{infolines theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,left]{author in head/foot}%
+    \usebeamerfont{author in head/foot}~~\insertshortinstitute: \insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.67\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}%\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+  \end{beamercolorbox}
+  }%
+  \vskip0pt%
+}
+
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\newcommand{\grp}{\textcolor{magenta}{Group Exercise}}
+\newcommand{\grpc}{\textcolor{magenta}{Group Exercise, continued}}
+\newcommand{\bsans}[1]{\underline{\hspace{0.2in}\color{blue!80}{#1}\hspace{0.2in}}}
+
+\definecolor{cverbbg}{gray}{0.93}
+\newenvironment{cverbatim}
+ {\SaveVerbatim{cverb}}
+ {\endSaveVerbatim
+  \flushleft\fboxrule=0pt\fboxsep=.5em
+  \colorbox{cverbbg}{\BUseVerbatim{cverb}}%
+  \endflushleft
+}
+\newenvironment{lcverbatim}
+ {\SaveVerbatim{cverb}}
+ {\endSaveVerbatim
+  \flushleft\fboxrule=0pt\fboxsep=.5em
+  \colorbox{cverbbg}{%
+    \makebox[\dimexpr\linewidth-2\fboxsep][l]{\BUseVerbatim{cverb}}%
+  }
+  \endflushleft
+}
+
+\newcommand{\bmp}{\begin{minipage}}
+\newcommand{\emp}{\end{minipage}}
+\newcommand{\blankcolumn}{\bmp{.05\textwidth}\hspace{0.50in} \emp}
+
+ \newenvironment{code}[1]%
+  {\vspace{.1in}\footnotesize\Verbatim[frame=single,label=SAS Code,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+ \newenvironment{Rcode}[1]%
+  {\vspace{.1in}\footnotesize\Verbatim[frame=single,label=R Code,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+   \newenvironment{RcodeScript}[1]%
+  {\vspace{.1in}\scriptsize\Verbatim[frame=single,label=R Code,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+ \newenvironment{RcodeTiny}[1]%
+  {\vspace{.1in}\tiny\Verbatim[frame=single,label=R Code,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+
+   \newenvironment{Rout}[1]%
+  {\vspace{.1in}\footnotesize\Verbatim[frame=single,label=R Output,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+  
+     \newenvironment{MTout}[1]%
+  {\vspace{.1in}\footnotesize\Verbatim[frame=single,label=Minitab Output,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+   \newenvironment{RoutScript}[1]%
+  {\vspace{.1in}\scriptsize\Verbatim[frame=single,label=R Output,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+ \newenvironment{RoutTiny}[1]%
+  {\vspace{.1in}\tiny\Verbatim[frame=single,label=R Output,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+\newenvironment{craw}[2]%
+{\vspace{.1in}\footnotesize\Verbatim[frame=single,label=#2,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+
+\newenvironment{scriptcraw}[2]%
+{\vspace{.1in}\scriptsize \Verbatim[frame=single,label=#2,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+  \newenvironment{tinycraw}[2]%
+{\vspace{.1in}\tiny \Verbatim[frame=single,label=#2,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}

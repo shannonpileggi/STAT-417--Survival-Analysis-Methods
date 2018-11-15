@@ -1,0 +1,94 @@
+---
+title: "Lab 8"
+author: "Your name"
+date: "March 15, 2018"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+
+```{r}
+library(survival)
+```
+
+# The data
+
+
+Recall the study by Burton et al. (1996) that investigated the age at first use of
+cocaine among 1658 white males.  The file `cocaine.txt` contains the ages at first use
+of cocaine, as well as measurements on several other variables. Some
+of the variables are: 
+
+
+Variable   | Description
+-----------|--------------------------------------------
+`cokeage`  | age at first cocaine use
+`censor`   | 1 = complete; 0 = cenosred
+`birthyr`  | number of years after the "baseline" year that the first males were born. `birthyr=0` are the oldest; `birthyr=10` are the youngest
+`Drug_use` | indicates whether the individual had ever used marijuana or other drugs; `1 =` neither marijuana nor any other drug; `2 =` marijuana only; `3 =` other drugs, but not marijuana; `4 =` both marijuana and other drugs
+`rural`    | indicates whether the male lived in a sub-urban area (`rural=1`) or urban area (`rural=0`)
+
+To import the data set, use `read.table`.
+
+```{r, eval = F}
+cocaine <- read.table("FILE PATH/cocaine.txt", header = TRUE)
+```
+
+
+# Question 1
+
+*Fit a Cox regression model for hazard of first cocaine use with the predictors `rural`, `birthyr`, `Drug_use` and the interaction between `Drug_use` and `birthyr`; view a `summary` of the results.  (Make sure that `as.factor()` is applied, if appropriate.)*
+
+
+# Question 2
+
+*Determine if the interaction term significantly improves the fit of the model with only `rural`, `birthyr`, and `Drug_use` included using the partial likelihood ratio test. State the hypotheses, compute the test statistic and the $p$-value, and state a conclusion. Hint: to compute the test statistic, you will need to fit the reduced model and find the evaluated log partial likelihoods for each model.*
+
+
+# Question 3
+
+*Compare the fit of the original model (with interaction) to the fit of the reduced model (without the interaction) using the AIC statistics (show your work).  Is your answer in agreement to your previous answer?*
+ 
+
+
+
+## Use the reduced model for all subsequent questions.
+
+
+
+
+# Question 4
+
+*Construct and interpret the martingale residual plot for the quantitative predictor `birthyr`.*
+
+
+
+# Question 5
+
+*Construct and interpret the deviance residual plot.*
+
+
+# Question 6
+
+*Construct and interpret the Schoenfeld residual plots for predictors `rural` and `birthyr`.  Make sure that you correctly identify which column corresponds to the specified predictors.*
+
+
+
+# Question 7
+
+*Execute the formal test for the proportional hazards assumption.  Do your results agree with your previous residual analysis?  Why or why not?*
+
+
+# Question 8
+
+*Construct and interpret the score residual plots for predictors `rural` and `birthyr`.  Make sure that you correctly identify which column corresponds to the specified predictors.*
+
+

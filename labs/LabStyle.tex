@@ -1,0 +1,293 @@
+
+%\documentclass[12pt]{report}
+
+\documentclass[12pt]{article}
+%\usepackage{natbib}  % used for citations
+\usepackage[parfill]{parskip} %used for formatting style of text
+
+
+
+\usepackage{graphicx,fancyhdr}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amssymb,amsmath}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{epigraph,fancyvrb,eqparbox}
+\usepackage[multiple]{footmisc}
+\usepackage{menukeys}
+\usepackage{menukeys}
+\usepackage{url}
+\usepackage[colorlinks = true, linkcolor = blue, urlcolor = blue]{hyperref}
+\usepackage{setspace}
+
+
+\pagestyle{fancyplain}
+
+%\usepackage{hyperref}
+%\usepackage{epsf,psfig,graphicx,fancyheadings}
+% \textwidth 7in
+% \textheight 9in
+% \oddsidemargin 0in
+% \topmargin -.25in
+
+%-----------------------------------------------
+% The following settings are from Dr. Davidian's
+% ST810A Handout on Advanced LaTeX Features
+
+%\setlength{\paperheight}{11.0in}
+%\setlength{\paperwidth}{8.5in}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% For Desktop @ CalPoly (for Postscript)
+
+%\setlength{\oddsidemargin}{0.5in}
+%\setlength{\evensidemargin}{0.5in}
+%\setlength{\topmargin}{-.5in}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% For Laptop @ Calpoly (for Postscript)
+
+% \setlength{\oddsidemargin}{0.in}
+% \setlength{\evensidemargin}{0.in}
+% \setlength{\topmargin}{0.25in}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% For Desktop @ CalPoly (for PDF)
+
+%\setlength{\oddsidemargin}{0.in}
+%\setlength{\evensidemargin}{0.in}
+%\setlength{\topmargin}{-.5in}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% For Laptop @ Calpoly (for PDF)
+%
+%% \setlength{\oddsidemargin}{0.in}
+%% \setlength{\evensidemargin}{0.in}
+%% \setlength{\topmargin}{0.25in}
+%
+%
+%
+%\setlength{\oddsidemargin}{0.0in}
+%\setlength{\topmargin}{-0.5in}
+%\setlength{\headheight}{0.20in}
+%\setlength{\headsep}{3ex}
+%\setlength{\baselineskip}{2ex}
+%\setlength{\textheight}{9in}
+%\setlength{\textwidth}{6.4in}
+%\renewcommand{\baselinestretch}{1.1}
+
+% Sets margins to 1 in
+%\addtolength{\oddsidemargin}{-.5in}%
+%\addtolength{\evensidemargin}{-.5in}%
+%\addtolength{\textwidth}{1in}%
+%\addtolength{\textheight}{1.3in}%
+%\addtolength{\topmargin}{-.8in}%
+
+%\setlength{\headheight}{0.20in}
+%\setlength{\headsep}{3ex}
+%\setlength{\headrulewidth}{0.2pt}
+%\setlength{\footrulewidth}{0.15pt}
+%\setlength{\parskip}{2.3ex}
+% %set to no indentation
+%\setlength{\parindent}{0.0in}
+%\setlength{\baselineskip}{2ex}
+%\setlength{\textheight}{9.in}
+%\setlength{\textwidth}{6.5in}
+
+\def \doublespace{\openup 2\jot}
+% For double or 1.5 spacing
+%\renewcommand{\baselinestretch}{1.5}
+\tolerance=500
+
+\def\boxit#1{\vbox{\hrule\hbox{\vrule\kern6pt
+\vbox{\kern6pt#1\kern6pt}\kern6pt\vrule}\hrule}}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+% The following for TOC
+%\renewcommand{\thepage}{\roman{page}}
+% to be followed by this for the main text
+\renewcommand{\thepage}{\arabic{page}}
+
+
+%-----------------------------------------------
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Define any shortcut aliases below
+
+\newtheorem{theo}{Theorem}[section]
+
+\newenvironment{note}{\begin{quote}\emph{Note:\ }}{\end{quote}}
+\newenvironment{defn}{
+\begin{description}
+\item[Definition ]}
+{\end{description}}
+
+\newenvironment{ttscript}[1]{%
+    \begin{list}{}{%
+    \settowidth{\labelwidth}{\texttt{#1}}
+    \setlength{\leftmargin}{\labelwidth}
+    \addtolength{\leftmargin}{\labelsep}
+    \setlength{\parsep}{0.5ex plus0.2ex minus0.2ex}
+    \setlength{\itemsep}{0.3ex}
+    \renewcommand{\makelabel}[1]{\texttt{##1\hfill}}}}
+    {\end{list}}
+
+\newcommand{\bt}{\begin{tabular}}
+\newcommand{\et}{\end{tabular}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bq}{\begin{quote}}
+\newcommand{\eq}{\end{quote}}
+\newcommand{\vect}[1]{\mbox{\boldmath $ #1$}}
+\newcommand{\avg}[1]{$\overline{#1}$}
+\newcommand{\bmp}{\begin{minipage}}
+\newcommand{\emp}{\end{minipage}}
+\newcommand{\hr}{\u{\hspace{7in}}}
+\newcommand{\sr}{\u{\hspace{5in}}}
+\newcommand{\chs}{\chi^2}
+
+\newcommand{\labn}[1]{\Large{\textbf{\fbox{Lab #1}}}}
+
+
+\newcommand{\hd}[1]{\lhead{STAT 417: Lab #1 (Pileggi, W18)}\rhead{Name: \hspace{1.75in}}}
+\newcommand{\hdS}[1]{\lhead{STAT 417: Lab #1 (Pileggi, W18)}\rhead{Name: \emph{\textcolor{OrangeRed}{Solutions}}}}
+\newcommand{\hdhw}[1]{\lhead{STAT 417: Homework #1 (Pileggi, W18)}\rhead{Name: \hspace{1.75in}}}
+\newcommand{\hdhwS}[1]{\lhead{STAT 417: Homework #1 (Pileggi, W18)}\rhead{Name: \emph{\textcolor{OrangeRed}{Solutions}}}}
+\newcommand{\bs}{\underline{\hspace{0.5in}}}
+\newcommand{\ans}[1]{\emph{\textcolor{OrangeRed}{#1}}}
+
+%\newcommand{\bv}{\footnotesize
+%\bmp{.5\textwidth}
+%\begin{Verbatim}[frame=single,label=SAS Code,commandchars=\\\{\}],xrightmargin=.5\textwidth}
+%
+%\newcommand{\ev}{\end{Verbatim}
+%\emp
+%\normalsize}
+
+\newcommand{\bv}{\begin{code}}
+\newcommand{\ev}{\end{code}}
+
+ \newenvironment{code}[1]%
+  {\vspace{.1in}\footnotesize\Verbatim[frame=single,label=SAS Code,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+\newenvironment{craw}[2]%
+{\vspace{.1in}\footnotesize\Verbatim[frame=single,label=#2,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+\newenvironment{cbox}[1]%
+{\vspace{.1in}\footnotesize\Verbatim[frame=single,commandchars=\\\{\},xrightmargin=#1\textwidth,framesep=.2in,labelposition=all]}
+  {\endVerbatim\normalsize}
+
+\newcommand{\head}[1]{\large \textbf{#1} \normalsize}
+
+\newcommand{\ttt}[1]{\textbf{\texttt{#1}}}
+
+
+\newcommand{\bsval}[1]{\underline{\hspace{0.2in}{[#1]}\hspace{0.2in}}}
+
+\newcommand{\ttb}{\textbf}
+\newcommand{\tte}{\emph}
+\newcommand{\ttu}{\underline}
+
+
+
+\newcommand{\jdhr}{\vspace{0.2in}\hrule}
+
+
+\newcommand{\uspace}[1]{\underline{\hspace{#1}}}
+
+\newenvironment{ident}{\begin{list}{}{}
+         \item[]}{\end{list}}
+
+\newenvironment{proposition}{
+\begin{description}
+\item[Proposition: ]}
+{\end{description}}
+
+\newcommand{\bpr}{\begin{proposition}}
+\newcommand{\epr}{\end{proposition}}
+
+
+
+% \newenvironment{example}
+%     {
+%         \begin{list}{\textbf{Example:}}
+%         {
+%         \settowidth{\labelwidth}{}
+%         \setlength{\leftmargin}{\labelwidth}
+%         }
+%     }
+%     {\end{list}}
+
+
+\newenvironment{example}{
+\jdhr \vspace{-.17in}\jdhr
+\textbf{Example: }}
+{}
+
+\newcommand{\bex}{\begin{example}}
+\newcommand{\eex}{\end{example}}
+
+\newenvironment{onyourown}{
+\jdhr \vspace{-.17in}\jdhr
+\textbf{On Your Own: }}
+{}
+
+\newcommand{\boy}{\begin{onyourown}}
+\newcommand{\eoy}{\end{onyourown}}
+
+
+%\newenvironment{debug}{
+%\jdhr \vspace{-.17in}\jdhr
+%\ttb{Debug the Code}
+%\fbox{
+%\bmp{.95in}
+%\includegraphics[height=.35in]{C:/images/bug4.jpg}\includegraphics[height=.35in]{C:/images/buggy8.jpg}
+%\emp}
+%}
+%{\jdhr}
+
+\newenvironment{debug}{
+\jdhr \vspace{-.17in}\jdhr
+\ttb{Debug the Code: }
+\fbox{
+\bmp{.95in}
+\includegraphics[height=.35in]{C:/images/bug4.jpg}\includegraphics[height=.35in]{C:/images/mushi90.jpg}
+\emp}
+}
+{}
+
+
+\newcommand{\bbug}{\begin{debug}}
+\newcommand{\ebug}{\end{debug}}
+
+
+\begingroup
+  \catcode `_=11
+  \gdef\myuscore{_}
+  \catcode `~=11
+  \gdef\mytilde{~}
+  \catcode `\|=0
+  \catcode `\\=11
+  |gdef|mybs{\}
+|endgroup
+
+%Define any shortcut aliases above
+
+
+%....................................................................
+%....................................................................
+%....................................................................
+%....................................................................
+%....................................................................
+%....................................................................
+%....................................................................
+%....................................................................
+
+
+
+\usepackage{amssymb}
+				

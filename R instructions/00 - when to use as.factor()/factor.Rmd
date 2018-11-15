@@ -1,0 +1,397 @@
+---
+title: "When to use as.factor()"
+author: "Shannon Pileggi"
+date: "February 27, 2018"
+output: 
+  html_document:
+    highlight: tango
+    theme: cerulean
+  toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+# Overview
+
+These examples are all created under a simple linear regression model using the command `lm` for the sake of simplicity and ease interpretation.  The principles of when to use `as.factor()` would still apply to any general model (including a Cox proportional hazards model), although the interpretations of the parameter estimates would change.
+
+# Data1: gender = 0/1
+
+
+## Create the data
+
+Consider a small data set that contains the variables height and gender.  In the first data set, we'll code gender as 0/1, where `0 = female` and `1 = male`.  
+
+Coding a variable as 0/1 can also be referred to as **reference cell coding** or as a **dummy variable**.  When we interpret the results, they are interpreted as the effect of the `1` level relative to the `0` level, or in this case the effect of `male` relative to `female`.
+```{r}
+# create data1, gender coded as 0/1
+data1 <- data.frame(height = c(67, 67, 67, 60, 64, 69, 71, 67, 67, 66,
+                               74, 75, 71, 71, 68, 75, 75, 74, 70, 74),
+                    gender = c(rep(0, 10), rep(1, 10)))
+
+# view 3 obs of each gender
+data1[c(1:3,11:13),]
+
+# summarize the data
+summary(data1)
+```
+Note how `R` summarizes the `gender` variable - it is summarized as if it is a quantitative, rather than categorical variable.  
+
+
+## Execute a linear model without `as.factor` (correct)
+
+Now let's execute a simple linear regression model with our 0/1 gender variable (without `as.factor`).  Because `gender` is coded as 0/1, this is a **correct** execution of this model.
+
+```{r}
+model1a <- lm(height ~ gender, data = data1)
+summary(model1a)
+```
+In this example, we see 
+
+1.  The estimated average height of females (`0`, the *reference* cell) is 66.5 inches.
+
+2.  The effect of `gender` is that males (`1`) are estimated to be 6.2 inches taller, on average, than females (`0`).
+
+## Execute a linear model with `as.factor` (correct, but unneccesary)
+
+Just for the sake of illustration, let's see what happens if we use `as.factor(gender)`.  
+```{r}
+model1b <- lm(height ~ as.factor(gender), data = data1)
+summary(model1b)
+```
+
+Note we get the exact same results.  Here, 
+
+1.  The `intercept` line is the exact same (66.5).
+
+2.  The 1 printed after `as.factor(gender)1` indicates that you are looking at the effect of the `1` level relative to the other level (`0`). So you can use `as.factor` on a categorical variables coded as 0/1, but it is **unneccesary**.
+
+
+# Data2: gender = 1/2
+
+
+## Create the data
+
+Consider a small data set that contains the variables height and gender.  In the second data set, we'll code gender as 1/2, where `1 = female` and `2 = male`.  
+
+Coding a variable as 1/2 is **no longer** in the **reference cell coding** or as a **dummy variable** format.  
+```{r}
+# create data2, gender coded as 1/2
+data2 <- data.frame(height = c(67, 67, 67, 60, 64, 69, 71, 67, 67, 66,
+                               74, 75, 71, 71, 68, 75, 75, 74, 70, 74),
+                    gender = c(rep(1, 10), rep(2, 10)))
+
+# view 3 obs of each gender
+data2[c(1:3,11:13),]
+
+# summarize the data
+summary(data2)
+```
+Note how `R` summarizes the `gender` variable - it is still summarized as if it is a quantitative, rather than categorical variable.  
+
+
+## Execute a linear model without `as.factor` (incorrect)
+
+Now let's execute a simple linear regression model with our 1/2 gender variable (without `as.factor`).  Because `gender` is coded as 1/2, this is a **incorrect** execution of this model.
+
+```{r}
+model2a <- lm(height ~ gender, data = data2)
+summary(model2a)
+```
+In this example, we see 
+
+1.  The intercept is estimated to be `60.3` inches, which is different than in `data1` (`66.5`).  This is an **incorrect** estimation of the intercept.  This **does not** correspond to the estimated average height for either males or females - it corresponds to the estimated average height for `gender = 0`, which does not exist!
+
+2.  The effect of `gender` is still the same and estimated correctly.  We see that males (`2`) are estimated to be 6.2 inches taller, on average, than females (`1`).  This is because we are still estimated the effect of for a *one unit increase in `gender`*.
+
+## Execute a linear model with `as.factor` (correct)
+
+Now let's correct this using `as.factor(gender)`.  This is a **correct** execution of this model.  
+```{r}
+model2b <- lm(height ~ as.factor(gender), data = data2)
+summary(model2b)
+```
+
+Note we get the same, and correct, results as computed with `data1`.  Here, 
+
+1.  The `intercept` line is the correct value (66.5).
+
+2.  The 2 printed after `as.factor(gender)2` indicates that you are looking at the effect of the `2` level relative to the other level (`1`). 
+
+When your categorical variable is coded as anything numeric other than 1/0, using `as.factor()` is **necessary** for correct estimation and interpretation of results.
+
+# Data3: gender = m/f
+
+
+## Create the data
+
+Consider a small data set that contains the variables height and gender.  In the third data set, we'll code gender as a character expression (m/f)`.  
+
+Coding a variable as m/f is **no longer** in the **reference cell coding** or as a **dummy variable** format.  
+```{r}
+# create data2, gender coded as 1/2
+data3 <- data.frame(height = c(67, 67, 67, 60, 64, 69, 71, 67, 67, 66,
+                               74, 75, 71, 71, 68, 75, 75, 74, 70, 74),
+                    gender = c(rep("f", 10), rep("m", 10)))
+
+# view 3 obs of each gender
+data1[c(1:3,11:13),]
+
+# summarize the data
+summary(data3)
+```
+Note how `R` summarizes the `gender` variable - now it is summarized as a categorical variable.  
+
+
+## Execute a linear model without `as.factor` (surprisingly correct)
+
+Now let's execute a simple linear regression model with our m/f gender variable (without `as.factor`).  Because `gender` is coded as m/f, I would have suspected an **error** in this model - however; `R` does the estimation **correctly**.
+
+```{r}
+model3a <- lm(height ~ gender, data = data3)
+summary(model3a)
+```
+In this example, we see 
+
+1.  The `intercept` line is the correct value (66.5).
+
+2.  The m printed after `genderm` indicates that you are looking at the effect of the `m` level relative to the other level (`f`). 
+
+## Execute a linear model with `as.factor` (still works correctly)
+
+Now let's try this using `as.factor(gender)`.  This is also **correct** execution of this model.  
+```{r}
+model3b <- lm(height ~ as.factor(gender), data = data3)
+summary(model3b)
+```
+
+Note we get the same, and correct, results as computed with `data1`.  Here, 
+
+1.  The `intercept` line is the correct value (66.5).
+
+2.  The m printed after `as.factor(gender)m` indicates that you are looking at the effect of the `m` level relative to the other level (`f`). 
+
+
+# Data4: age_group = y/m/o
+
+
+## Create the data
+
+Consider a small data set that contains the variables height and age_group.  In this data set, we'll code age_group as y/m/o, where `y = young` and `m = middle` and `o = old`.  
+
+Coding a variable as 0/1 can also be referred to as **reference cell coding** or as a **dummy variable**.  When we interpret the results, they are interpreted as the effect of the `1` level relative to the `0` level, or in this case the effect of `male` relative to `female`.
+```{r}
+# create data4, age_group coded as y/m/o
+data4 <- data.frame(height = c(55, 57, 48, 62, 53, 53, 49, 54, 53, 60,
+                               67, 67, 67, 60, 64, 69, 71, 67, 67, 66,
+                               74, 75, 71, 71, 68, 75, 75, 74, 70, 74),
+                    age_group = c(rep("y", 10), rep("m", 10), rep("o", 10)))
+
+# view first 3 obs of each age group
+data4[c(1:3,11:13,21:23),]
+
+# summarize the data
+summary(data4)
+```
+Note how `R` summarizes the `age_group` variable - it is summarized as a categorical variable.  
+
+
+## Execute a linear model without `as.factor` (surprisingly correct)
+
+Now let's execute a simple linear regression model with our y/m/o age_group variable (without `as.factor`).  This surprisingly does not give an error.
+
+```{r}
+model4a <- lm(height ~ age_group, data = data4)
+summary(model4a)
+```
+In this example, we see 
+
+1.  The estimated average height of the `m` age_group is 66.5 inches.  How do I know that is the effect of the middle age_group?  Because `m` is not printed in the other two age_group effects.
+
+2.  The first effect of `age_group` is that the older age group (`o`) is estimated to be 6.2 inches taller, on average, than middle age group (`m`).
+
+3.  The second effect of `age_group` is that the young age group (`y`) is estimated to be 12.2 inches shorter, on average, than middle age group (`m`).
+
+Note that `R` automatically coded the `m` age_group as the **reference cell**.
+
+
+## Execute a linear model with `as.factor` (also correct)
+
+Just for the sake of illustration, let's see what happens if we use `as.factor(age_group)`.  
+```{r}
+model4b <- lm(height ~ as.factor(age_group), data = data4)
+summary(model4b)
+```
+Here, the results are unchanged.
+
+1.  The estimated average height of the `m` age_group is 66.5 inches.  How do I know that is the effect of the middle age_group?  Because `m` is not printed in the other two age_group effects.
+
+2.  The first effect of `age_group` is that the older age group (`o`) is estimated to be 6.2 inches taller, on average, than middle age group (`m`).
+
+3.  The second effect of `age_group` is that the young age group (`y`) is estimated to be 12.2 inches shorter, on average, than middle age group (`m`).
+
+Again, `R` automatically coded the `m` age_group as the **reference cell**.
+
+
+# Data5: age_group = 1/2/3
+
+
+## Create the data
+
+Consider a small data set that contains the variables height and age_group.  In this data set, we'll code age_group as 1/2/3, where `1 = young` and `2 = middle` and `3 = old`.  
+
+Note that this coding is **not** in the format of reference cell coding.
+```{r}
+# create data4, age_group coded as y/m/o
+data5 <- data.frame(height = c(55, 57, 48, 62, 53, 53, 49, 54, 53, 60,
+                               67, 67, 67, 60, 64, 69, 71, 67, 67, 66,
+                               74, 75, 71, 71, 68, 75, 75, 74, 70, 74),
+                    age_group = c(rep(1, 10), rep(2, 10), rep(3, 10)))
+
+# view first 3 obs of each age group
+data5[c(1:3,11:13,21:23),]
+
+# summarize the data
+summary(data5)
+```
+Note how `R` summarizes the `age_group` variable - it is summarized as a quantitative variable.  
+
+
+## Execute a linear model without `as.factor` (incorrect)
+
+Now let's execute a simple linear regression model with our 1/2/3 age_group variable (without `as.factor`).  This yields **incorrect** estimation.
+
+```{r}
+model5a <- lm(height ~ age_group, data = data5)
+summary(model5a)
+```
+In this example, we see 
+
+1.  The estimated average height when age_group equals 0 is 46.2 inches - this is meaningless because this age_group never equals zero!
+
+2.  R is treating age_group as a quantitative predictor - it is saying that the estimated effect for each one unit increase in age_group is a 9 inch increase in height.  This is meaningless because going from young to medium to old is **not** the same as a one unit increase.
+
+Note that `R` does **not** automatically code the age_group variable as reference cell coding.
+
+
+## Execute a linear model with `as.factor` (correct)
+
+Now let's see what happens if we use `as.factor(age_group)`. This is a **correct** execution of the linear model. 
+```{r}
+model5b <- lm(height ~ as.factor(age_group), data = data5)
+summary(model5b)
+```
+Here, the results are unchanged.
+
+1.  The estimated average height of the `1` age_group (`young`) is 54.4 inches.  How do I know that is the effect of the young age_group?  Because `1` is not printed in the other two age_group effects.
+
+2.  The first effect of `age_group` is that age_group `2` (middle) is estimated to be 12.1 inches taller, on average, than age_group `1` (young).
+
+3.  The second effect of `age_group` is that age_group `3` (old) is estimated to be 18.3 inches taller, on average, than age_group `1` (young).
+
+Again, `R` automatically coded the age_group variable into **reference cell** coding; however, this time the young age group was considered the reference (in the previous example it was the middle age group).
+
+# Change the reference cell
+
+For ease of interpretation, your might want to change the reference cell coding from the default assignment to something else.
+
+## Default assignments
+
+Note that the default reference cells:
+
++  When `age_group` was coded as `y/m/o`, the default reference cell was `m`.
+
++  When `age_group` was coded as `1/2/3`, the default reference cell was `1`.
+
+How does `R` apply default reference cell assignments?  
+
++  For the character values of `y/m/o`, `m` was established as the default reference cell because it is *first alphabetically*.
+
++  For the numeric values of `1/2/3`, `1` was established as the default reference cell because it is *first numerically*.
+
+These default settings might not always be desirable.  Let's examine how to assign the reference cell as the "old" group (`o`/`3`).
+
+
+## Data4: age_group = y/m/o
+
+In `data4`, `age_group` was coded as `y/m/o`.  You can further understand this data by using the `str` command, which stands for stands for structure.  
+
+```{r}
+str(data4)
+```
+This tells you that `age_group` is a `factor` variable, with three levels.  The ordering of the three levels is `m`, `o`, `y` (alphabetically).
+
+We change the ordering of the `age_group` variable using the `levels` argument in the `factor` function.  Here, we are creating the `age_groupNEW` variable to have levels with a new ordering.  We are establishing `o` as the first ordered level because the default is to use the **first ordered level as the reference cell**.
+
+```{r}
+data4$age_groupNEW <- factor(data4$age_group, 
+                             levels = c("o", "m", "y"))
+str(data4)
+
+levels(data4$age_groupNEW)
+```
+Now we can re-execute our analysis and re-interpret the results:
+
+```{r}
+model4c <- lm(height ~ age_groupNEW, data = data4)
+summary(model4c)
+```
+In this example, we see 
+
+1.  The estimated average height of the `o` age_group is 72.7 inches.  How do I know that is the effect of the old age_group?  Because `o` is not printed in the other two age_group effects.
+
+2.  The first effect of `age_groupNEW` is that the middle age group (`m`) is estimated to be 6.2 inches shorter, on average, than older age group (`o`).
+
+3.  The second effect of `age_groupNEW` is that the young age group (`y`) is estimated to be 18.3 inches shorter, on average, than old age group (`o`).
+
+## Data5: age_group = 1/2/3
+
+In `data5`, `age_group` was coded as `1/2/3`.  You can further understand this data by using the `str` command, which stands for stands for structure.  
+
+```{r}
+str(data5)
+```
+This tells you that `age_group` is a `numeric` variable.  We need to (1) assign it to be a factor variable, and (2) change the ordering of levels as desired.
+
+We assign `age_group` as a factor variable using both the `labels` and the `levels` argument in the `factor` function.  I am doing this in a two-step process because I could not get the one-step process to work (though it may be possible!),
+
+Step 1: Create `age_groupNEW` to be a factor variable with character, rather than numeric, labels.
+
+Step 2: Create `age_groupNEW2` to re-order the levels of the factor variable.
+
+```{r}
+data5$age_groupNEW <- factor(data5$age_group, 
+                             labels = c("young", "medium", "old"))
+
+data5$age_groupNEW2 <- factor(data5$age_groupNEW, 
+                             levels = c("old", "medium", "young"))
+
+str(data5)
+
+```
+Now we can re-execute our analysis and re-interpret the results:
+
+```{r}
+model5c <- lm(height ~ age_groupNEW2, data = data5)
+summary(model5c)
+```
+Now the results match the previous example.  
+
+## Other ways
+
+There are other ways to change reference levels:
+
++ Base R: https://www.r-bloggers.com/reorder-factor-levels/
+
++ Base R: http://www.cookbook-r.com/Manipulating_data/Changing_the_order_of_levels_of_a_factor/
+
++ Forcats package (tidyverse): http://forcats.tidyverse.org/reference/fct_recode.html
+
+# Summary
+
++ When a categorical variable is coded numerically as anything other than `0/1`, you **must** use `as.factor()` for correct estimation!
+
++  In all other cases, using `as.factor()` is not required, but will also not hurt anything (will still yield correct results).
+
++  Pay attention to the *reference cell* of your factor variable and change it manually if needed.

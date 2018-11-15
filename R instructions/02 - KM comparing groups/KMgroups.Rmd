@@ -1,0 +1,104 @@
+---
+title: "Non-parametric survival methods in R: comparing groups"
+author: "Shannon Pileggi"
+date: "February 9, 2018"
+output: 
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+# Getting started
+
+For illustration, we'll use the `ovarian` data set located in the `survival` library.  Recall that this data compares two treatments for ovarian cancer.
+
++ `futime` = time to death
+
++ `fustat` = censoring status (1 = complete, 0 = right censored)
+
++ `rx` =  treatment group (1/2)
+
+To access the data set, execute the code below.
+
+```{r}
+# ovarian data set is in the survival library
+library(survival)
+data(ovarian) 
+```
+
+Next, create your `survfit` model.  In previous models, we used the syntax ` ~ 1` to indicate an intercept only model (not stratified).  Now, we'll use the syntax ` ~ group_var` to indicate to compute Kaplan-Meier curves separately for each group.  In this case, `rx` defines our groups of interest.
+
+```{r}
+KM_obj <- survfit(Surv(futime, fustat) ~ rx, data = ovarian)
+```
+
+**Note:**  If your `group_var` variable is coded numerically (as in 1/2, etc.) you need to explicitly tell R to treat this as a categorical rather than quantitative variable.  You do this by wrapping the `group_var` variable in the `as.factor` function. A generic expression for this would look like:
+
+```{r, eval = FALSE}
+KM_obj <- survfit(Surv(time, censor) ~ as.factor(group_var), data = my_data)
+```
+
+# Obtaining estimates
+
+Obtain the Kaplan-Meier survival estimates by group (`rx` in this case) by using the `summary` function:
+
+```{r}
+summary(KM_obj)
+```
+
+You can also obtain esimates of the median survival time in each group simply by printing the Kaplan-Meier object.
+
+```{r}
+KM_obj
+```
+
+
+# Plots
+
+## base R
+
+When plotting in base R, you need to specify a graphical element to differentiate the curves.  You can do this by color (`col`) or line type (`lty`) as shown belown.  In this case, we have two groups, so I specified two different line types.  Similarly, the two graphical elements need to be defined in the legend as well.
+
+```{r, fig.height=4}
+plot(KM_obj, 
+     lty = 1:2,
+     xlab = "Time to death",
+     ylab = "Survival probability",
+     main = "KM curves for two ovarian cancer treatments"
+     )
+
+legend("topright", c("Trt 1", "Trt 2"), lty = 1:2)
+```
+
+
+## ggsurvplot
+
+To use a `gg` version of survival plotting, install the `survminer` package and use the `ggsurvplot` function.  Note that this function has many options, including whether or not to plot confidence intervals (`conf.int`) or the risk table (`risk.table`).
+
+```{r, message = FALSE}
+library(survminer)
+```
+
+
+```{r, fig.height=5}
+ggsurvplot(KM_obj, data = ovarian, risk.table = TRUE)
+```
+
+# Log-rank test
+
+Use the function `survdiff` on a survival object to perform the log-rank test.
+
+```{r}
+survdiff(Surv(futime, fustat) ~ rx, data = ovarian)
+```
+
+# Notes
+
++ `R` does not provide the Wilcoxon test.
+
++ Methods are the same if you have more than 2 groups.
+

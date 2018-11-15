@@ -1,0 +1,252 @@
+\input{"C:/Users/spileggi/Google Drive/STAT 417/Slides/SlideStyle.tex"}
+
+
+
+\title[Set 9]{Cox Regression Models: Inference for $\beta$ and $HR$}
+\author[Pileggi]{Shannon Pileggi}
+
+\institute[STAT 417]{STAT 417}
+
+\date{}
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{OUTLINE\qquad\qquad\qquad} \tableofcontents[hideallsubsections]
+\end{frame}
+
+
+%===========================================================================================================================
+\section[Inference for $\beta$ and $HR$]{Inference for $\beta$ and $HR$}
+%===========================================================================================================================
+\subsection{}
+
+\begin{frame}
+\frametitle{Discussion}
+Recall the one predictor CR model:
+\begin{eqnarray}
+h(t|X) = h_0(t)e^{\beta X} \nonumber
+\end{eqnarray}
+Suppose that the true ratio of hazards for two values of $X$ is $e^{\beta c} = 1$.
+\begin{enumerate}
+\item  What does this imply about the true of $\beta$?
+\item[]
+\item[]
+\item[]
+\item[]
+\item  What does this imply about the variable $X$?
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{Hypotheses}
+What hypotheses should we use to determine if a single predictor $X$ is associated with the hazard of event occurrence?
+\begin{itemize}
+\item[$H_0$:]
+\item[]
+\item[]
+\item[]
+\item[$H_a$:]
+\item[]
+\item[]
+\item[]
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Wald test}
+The Wald test statistic is given by:
+\vskip200pt 
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{NELS college graduation data}
+\begin{Rout}{-0.05}
+                      coef exp(coef) se(coef)     z Pr(>|z|)
+as.factor(Gender)1 0.20862   1.23197  0.08141 2.563   0.0104 *
+\end{Rout}
+\begin{itemize}
+\item State the hypotheses.
+\item[]
+\item Show the computation of the test statistic.
+\item[]
+\item[]
+\item State a conclusion about the relationship between gender and the hazard of graduating at $\alpha=0.05$ level of significance.
+\item[]
+\item[]
+\item[]
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{CI for $\beta$}
+\begin{itemize}
+\item The $100(1-\alpha)$\% CI for $\beta$ is given by:
+\item[]
+\item[]
+\item[]
+\item[]
+\item Interpretation:
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{NELS college graduation data}
+\begin{Rout}{-0.05}
+                      coef exp(coef) se(coef)     z Pr(>|z|)
+as.factor(Gender)1 0.20862   1.23197  0.08141 2.563   0.0104 *
+\end{Rout}
+Construct and interpret a 95\% CI for $\beta$.
+\vskip200pt
+\end{frame}
+
+\begin{frame}
+\frametitle{CI for $HR$}
+\begin{itemize}
+\item Categorical predictor (X=0/1): the hazard ratio for subjects with $X=1$ to subjects with $X=0$ is:
+\item[]
+\item[]
+\item Quantitative predictor: the hazard ratio corresponding to a $c$ unit change in $X$ is:
+\item[]
+\item[]
+\item Generally, a $100(1-\alpha)$\% confidence interval for $HR$ is:
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Discussion}
+\begin{clicker}{What value should we see if a confidence interval for the hazard ratio contains in order to determine if $X$ is associated with hazard?}
+\begin{enumerate}[A.]
+\item 0
+\item 0.5
+\item 1
+\item none of these
+\end{enumerate}
+\end{clicker}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{NELS college graduation data}
+
+\begin{Rout}{-0.05}
+                      coef exp(coef) se(coef)     z Pr(>|z|)
+as.factor(Gender)1 0.20862   1.23197  0.08141 2.563   0.0104 *
+\end{Rout}
+Construct and interpret a 95\% confidence interval for the hazard ratio of female to male students.
+\vskip200pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{NELS college graduation data}
+\begin{Rout}{-0.05}
+Call:
+coxph(formula = Surv(Years, Censor) ~ as.factor(Gender), data = graduate)
+
+  n= 1000, number of events= 614
+
+                      coef exp(coef) se(coef)     z Pr(>|z|)
+as.factor(Gender)1 0.20862   1.23197  0.08141 2.563   0.0104 *
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+                   exp(coef) exp(-coef) lower .95 upper .95
+as.factor(Gender)1     1.232     0.8117      1.05     1.445
+
+Concordance= 0.53  (se = 0.012 )
+Rsquare= 0.007   (max possible= 0.999 )
+Likelihood ratio test= 6.61  on 1 df,   p=0.01016
+Wald test            = 6.57  on 1 df,   p=0.01039
+Score (logrank) test = 6.59  on 1 df,   p=0.01025
+\end{Rout}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG lung cancer study}
+\begin{Rout}{-0.05}
+               coef exp(coef)  se(coef)      z Pr(>|z|)
+    karno -0.033424  0.967129  0.005075 -6.586 4.51e-11 ***
+\end{Rout}
+Construct and interpret a 95\% confidence interval for the hazard ratio for a 10 unit increase in Karnofsky score.
+\vskip200pt
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{VALCG lung cancer study}
+\begin{Rout}{-0.05}
+Call:
+coxph(formula = Surv(time, status) ~ karno, data = veteran)
+
+  n= 137, number of events= 128
+
+           coef exp(coef)  se(coef)      z Pr(>|z|)
+karno -0.033424  0.967129  0.005075 -6.586 4.51e-11 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+      exp(coef) exp(-coef) lower .95 upper .95
+karno    0.9671      1.034    0.9576    0.9768
+
+Concordance= 0.709  (se = 0.03 )
+Rsquare= 0.264   (max possible= 0.999 )
+Likelihood ratio test= 42.03  on 1 df,   p=8.983e-11
+Wald test            = 43.38  on 1 df,   p=4.513e-11
+Score (logrank) test = 45.32  on 1 df,   p=1.674e-11
+\end{Rout}
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG lung cancer study}
+\begin{enumerate}
+\item Provide the 95\% confidence interval for both $\beta$ and $HR$ corresponding to a 1 point increase in Karnofsky score.
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item Construct a 95\% confidence interval for both $\beta$ and $HR$ corresponding to a 10 point increase in Karnofsky score.
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+\frametitle{VALCG lung cancer study}
+\begin{enumerate}
+\setcounter{enumi}{2}
+\item How would you respond to a claim that the risk of dying from lung cancer decreases by more than 25\% for a 10 point increase in Karnofsky score?
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\item[]
+\end{enumerate}
+\end{frame}
+
+
+\end{document}

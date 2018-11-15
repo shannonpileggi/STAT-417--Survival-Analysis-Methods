@@ -1,0 +1,292 @@
+\documentclass[letterpaper,12pt]{report}
+
+\usepackage{graphicx}
+\usepackage{amssymb,amsmath}
+\usepackage{epigraph,fancyvrb,eqparbox}
+%\usepackage[multiple]{footmisc}
+%\usepackage{menukeys}
+\usepackage{url}
+\usepackage[colorlinks = true, linkcolor = blue, urlcolor = blue]{hyperref}
+\usepackage{setspace}
+%\usepackage{fancyhdr}
+\usepackage{enumerate}
+
+\usepackage[margin=0.75in]{geometry}
+
+%\usepackage{cellspace}
+%\setlength\cellspacetoplimit{5pt}
+%\setlength\cellspacebottomlimit{5pt}
+
+\setlength{\parindent}{0cm}
+
+%\newcommand\Tstrut{\rule{0pt}{2.6ex}}         % = `top' strut
+%\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}}   % = `bottom' strut
+
+%\lhead{STAT 217: Introduction to }
+\begin{document}
+
+\begin{center}
+\large{\textsc{STAT 417: Survival Analysis Methods}}\\
+California Polytechnic State University, San Luis Obispo\\
+Winter 2018\\
+\end{center}
+\vskip10pt
+\begin{center}
+{\renewcommand{\arraystretch}{1.5}
+\begin{tabular}{llllll}
+\hline
+\textbf{Instructor:} & Shannon Pileggi       &&& \textbf{Office:} & 25-109 \\
+\textbf{Email:}      & spileggi@calpoly.edu  &&& \textbf{Phone:} & 756-2946 \\
+\hline
+\end{tabular}}
+\end{center}
+
+\vskip15pt
+
+\textbf{Class meetings}
+\begin{itemize}
+\item[]
+\begin{tabular}{llll}
+       & Time       & Lecture &  Lab \\
+Sec 01 & 10:10-10:00  & MTW 14-250 & R 35-111B \\
+\end{tabular}
+\item[]
+\end{itemize}
+
+\textbf{Office hours}
+\begin{itemize}
+\item[] M 11:30-12:30 \\ T \hspace{0.1ex} 1:30-2:30 \\ W 11:30-12:30 \\ R \hspace{0.1ex} 1:30-2:30 \\ By appointment (please email me three times you are available)
+\item[]
+\end{itemize}
+
+\textbf{Diversity statement}
+\begin{itemize}
+\item[] This is an inclusive class that welcomes and values participation from individuals of \textbf{all} identities, which includes but is not limited to: race, ethnicity, culture, religion, gender, sexual orientation, language, national origin, age, physical/emotional/developmental ability, and socio-economic class.
+\item[]
+\end{itemize}
+
+\textbf{Course description}
+\begin{itemize}
+\item[]
+Time-to-event data arise naturally in a variety of fields including epidemiology, medicine, and psychology whenever the variable of interest is the time until a specific event occurs, e.g. death, alcohol or drug relapse, graduation, or mechanical failure. This course covers parametric and nonparametric methods for analyzing time-to-event data. An attempt will be made to present both theory and application of the methods. Homework problem sets may include mathematical derivations, computer assisted data analysis, and interpretation of computer output.
+\item[]
+\end{itemize}
+
+\textbf{Prerequisites and recommended background}
+\begin{itemize}
+\item[]
+STAT 302 is required or consent of instructor. A calculus background is also required. Knowledge of a statistical software package is helpful, but not required.
+\item[]
+\end{itemize}
+
+
+\textbf{Learning objectives}
+\begin{enumerate}
+\item  Describe characteristics of time-to-event random variables and identify types of data where survival analysis techniques are appropriate.
+
+\item Identify and distinguish between various censoring and truncation mechanisms.
+
+\item Utilize the mathematical definitions for different functions of the time-to-event random variable, including the survival function, hazard function, and cumulative hazard function; know various relationships between the functions.  Compute these functions for a given distribution of the survival time random variable.
+
+\item Describe and execute methods for fitting parametric models to time-to-event data.
+
+\item Compute descriptive measures of the time-to-event random variable under parametric and non-parametric assumptions; provide interpretations.
+
+\item Construct the Kaplan-Meier and Nelson-Aalen estimators of the survival, hazard, and cumulative hazard functions.
+
+\item Describe and execute inferential methods for survival probabilities.
+
+\item Describe and execute various inferential methods for comparing survival curves including
+log-rank and Wilcoxon tests.
+
+\item Fit the Cox proportional hazards model to time-to-event data, interpret and perform inference for model parameters, and assess model assumptions using residual diagnostics and other procedures.
+
+\item Fit accelerated failure time models to time-to-event data under different distributional
+assumptions.
+
+\item Read and interpret results of survival analyses from real studies.
+
+\item Implement all survival analysis methods using statistical software.
+
+\item Work productively as individuals and in groups to build a community of learners.
+\item[]
+\end{enumerate}
+
+\textbf{Materials}
+\begin{itemize}
+\item[]
+\begin{tabular}{p{2cm} p{14cm}}
+Textbook & There is \textbf{\textit{no}} required textbook for this course; a recommended textbook that can be used as a reference is \textit{Survival Analysis: A Self-Learning Text, 3rd Edition} by David Kleinbaum and Mitchel Klein. \\
+[1ex]
+Calculator & A calculator will be useful for some lecture and exam content. You may use any type of calculator.\\
+[1ex]
+Software &  R and Minitab.  R is a free statistical software which can be accessed on campus computers or you may download to your personal laptop (see download instructions on PolyLearn). Minitab can be accessed on the lab computers or on public computers around campus. \\
+[1ex]
+Flash drive & It will be helpful to save your lab work on a flash drive. \\
+[1ex]
+\end{tabular}
+\item[]
+\end{itemize}
+
+
+\textbf{Course evaluation}
+\begin{itemize}
+\item[]
+\begin{minipage}{0.35\textwidth}
+{\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|ll|}
+\hline
+Item & Percentage \\
+\hline
+Homework/Labs    & 12\%\\
+Midterm 1          & 24\%  \\
+Midterm 2          & 24\%  \\
+Final              & 30\% \\
+Project            & 10\%\\
+\hline
+\end{tabular}}
+\vskip30pt
+\end{minipage}
+\begin{minipage}{0.05\textwidth} \hspace{0.05in} \end{minipage}
+\begin{minipage}{0.25\textwidth}
+\begin{tabular}{|llll|}
+\hline
+Letter & Percent & Letter & Percent \\
+\hline
+A	&	93-100	& C+	&	77-79.9	\\
+A-	&	90-92.9	& C	&	73-76.9	\\
+B+	&	87-89.9	& C-	&	70-72.9	\\
+B	&	83-86.9	& D+	&	67-69.9	\\
+B-	&	80-82.9	& D	&	60-66.9	\\
+     &          & F &	0-59.9	\\
+\hline
+\end{tabular}
+\end{minipage}
+%\begin{minipage}{0.25\textwidth}
+%\begin{tabular}{|ll|}
+%\hline
+%Letter & Percent \\
+%\hline
+%A	&	93-100	\\
+%A-	&	90-92.9	\\
+%B+	&	87-89.9	\\
+%B	&	83-86.9	\\
+%B-	&	80-82.9	\\
+%
+%C+	&	77-79.9	\\
+%C	&	73-76.9	\\
+%C-	&	70-72.9	\\
+%D+	&	67-69.9	\\
+%D	&	60-66.9	\\
+%F	&	0-59.9	\\
+%\hline
+%\end{tabular}
+%\end{minipage}
+\item[]
+\end{itemize}
+
+\textbf{Homework}
+\begin{itemize}
+\item[]
+Homework problems will be assigned approximately once a week and partially graded for credit. Late submissions will receive a grade penalty.
+\item[]
+\end{itemize}
+
+\textbf{Lab assignments}
+\begin{itemize}
+\item[]
+Once per week we will meet in a computer lab.  This lab session will consist of software demonstrations and/or assigned exercises requiring you to implement survival analysis methods and techniques in Minitab or \texttt{R}. The lab assignments will count towards the homework portion of your overall grade.
+\item[]
+\end{itemize}
+
+
+\textbf{Exams}
+\begin{itemize}
+\item[]
+Midterm exams and the final exam will be in class and closed-book exams.  Questions on the exam will reflect the examples in lecture, homework problems, and lab activity problems.  Interpretation of \emph{output} from statistical software is testable material.  The exams are closed-book, but you will be able to bring one handwritten page of notes to each exam.  Exams are \textbf{cumulative} by the nature of the material, although for the final exam, material presented later in the quarter will be emphasized more.  The exams are scheduled for:
+\begin{itemize}
+\item Midterm exam 1: \textbf{Thursday, Feb 1}
+\item Midterm exam 2: \textbf{Thursday, Mar 1}
+\item Final exam: \textbf{Monday, March 19, 10:10am-1:00pm}
+\end{itemize}
+\item[]
+The exam note sheet:
+\begin{itemize}
+\item Must be submitted with the exam.
+\item Must be your own note sheet (copies of other student's note sheets are not permitted).
+\item May be front and back.
+\item May contain formulas and definitions.
+\item May not contain examples, graphs, or pictures.
+\end{itemize}
+\item[]
+\end{itemize}
+
+\textbf{Project}
+\begin{itemize}
+\item[] Your \textbf{team} project entails study design, data collection, and analysis of results. More details will be provided later.
+%\item[]
+%\begin{tabular}{lll}
+%Phase 1 & Project proposal   & due \\
+%Phase 2 & Data collection    & due \\
+%Phase 3 & Preliminary report & due \\
+%Phase 4 & Analysis proposal  & due \\
+%Phase 5 & Final report       & due \\
+%\end{tabular}
+\item[]
+\end{itemize}
+
+
+\textbf{Communication}
+\begin{itemize}
+\item[]
+A productive quarter requires good communication between instructors and students, which includes both personal and course related issues. Course related questions can include clarification on course policy, but mostly arise from questions regarding course content. All course related questions can be discussed in person or otherwise should be posted to the PolyLearn discussion forum. This is because it is likely that other students may have similar questions, and then the whole class can benefit from your question. On the other hand, personal communication may entail issues like missing class for personal reasons, or requests for a meeting. Please discuss with me in person or email me any personal communication.
+\item[]
+\end{itemize}
+
+\textbf{Difficult conversations}
+\begin{itemize}
+\item[]
+Occasionally students encounter challenges in classroom dynamics with other students or even with the professor.  If you ever find yourself in the situation where you aren't comfortable with something that was said or done, please consider taking one of the following actions:
+\begin{itemize}
+\item Discuss the issue with me privately during office hours.
+\item Discuss the issue with the class or individual of concern if you feel you can do so in a respectful and well-communicated way.
+\item Discuss the issue with someone that you feel that you can trust (another faculty member, a mentor, or advisor) and who can, in turn, communicate your concerns with me.*
+\end{itemize}
+Change cannot be enacted unless there is awareness of a problem - thank you for taking action.
+\item[]
+\end{itemize}
+
+
+\textbf{Tips for success}
+\begin{itemize}
+\item \emph{Practice!}  Many students who simply review the slides before an exam do poorer than they expected. The key to success is continual practice, which can come in the form of reviewing labs and homework sets, and doing extra practice problems in the optional text book.
+\item \emph{Repetition!}  Many students struggle to grasp new statistical concepts the first time they read about or hear about it.  Review material frequently.
+\item \emph{Ask questions!} Your instructor is your best resource to answer any questions or provide any clarification. Please visit office hours early and often!  Seek clarification on course content as soon as questions arise.
+\item \emph{Put in the time!}  You know the 25-35 drill: you should be studying \textbf{at least 8 hours a week} for this course.
+\item[]
+\end{itemize}
+
+\textbf{Academic integrity}
+\begin{itemize}
+\item[]
+All students are expected to uphold high standards of academic integrity. The university provides \href{http://www.academicprograms.calpoly.edu/content/academicpolicies/Cheating}{broad definitions} of academic misconduct and also provides \href{http://www.osrr.calpoly.edu/process}{due process} for students with an alleged violation.  Please note that there may be serious consequences for academic misconduct, including failing an assignment or the course. If you are ever unsure as to whether or not an action is acceptable, please do not hesitate to contact the instructor.
+\item[]
+\end{itemize}
+
+\textbf{Disability resources}
+\begin{itemize}
+\item[]
+If you have a disability for which you are or may be requesting an accommodation, you are encouraged to contact both your instructor and the \href{http://drc.calpoly.edu/}{Disability Resource Center}, Building 124, Room 119, at (805) 756-1395, as soon as possible.
+\item[]
+\end{itemize}
+
+\textbf{Other policies}
+\begin{itemize}
+\item All course materials and important announcements will be posted on PolyLearn. You are expected to check PolyLearn regularly and read your emails.
+\item Students are expected to attend all class meetings.  However, missing class for religious holidays, school-related travel for academics or athletics, serious illness, or family emergencies is excused, and missed work due to such reasons will be allowed to be made up.
+\item Please notify the instructor in a timely manner of any events that may adversely impact your performance in the class.
+\item[]
+\end{itemize}
+
+
+\end{document}

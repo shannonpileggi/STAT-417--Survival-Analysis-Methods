@@ -1,0 +1,433 @@
+---
+title: "Cox proportional hazards regression model"
+author: "Shannon Pileggi"
+date: "February 19, 2018"
+output: 
+  html_document:
+    highlight: tango
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+---
+
+# Getting started
+
+For illustration, we'll use the `lung` data set located in the `survival` library.  This data set is about survival in patients with advanced lung cancer from the North Central Cancer Treatment Group. Performance scores rate how well the patient can perform usual daily activities.
+
+Variable   | Meaning
+-----------|--------------------
+`inst`     |Institution code
+`time`     |Survival time in days
+`status`   |censoring status 1=censored, 2=dead
+`age`      |Age in years
+`sex`      |Male=1 Female=2
+`ph.ecog`  |ECOG performance score (0=good 5=dead)
+`ph.karno` |Karnofsky performance score (bad=0-good=100) rated by physician
+`pat.karno`|Karnofsky performance score as rated by patient
+`meal.cal` |Calories consumed at meals
+`wt.loss`  |Weight loss in last six months
+
+To access the data set, execute the code below.
+
+```{r}
+# lung data set is in the survival library
+library(survival)
+data(lung) 
+```
+
+# Simple Cox PH model
+ 
+ Let's estimate the Cox proportional hazards model to examine the relationship between survival time in days (`time`) and gender (`sex`).  Note that since `sex` is coded as 1/2, we need to explicitly tell R to treat it as a categorical variable using the `as.factor` function.  Use the `coxph` function to estimate the model.
+ 
+```{r}
+CR_mod1 <- coxph(Surv(time, status) ~ as.factor(sex), data = lung)
+summary(CR_mod1)
+```
+ 
+# Multiple Cox PH model 
+
+To include multiple predictors in the Cox regression model, include additional predictors with a `+` sign in your model formula.  The model below includes predictors for `age` and `sex`.
+
+```{r}
+CR_mod2 <- coxph(Surv(time, status) ~ as.factor(sex) + age, data = lung)
+summary(CR_mod2)
+```
+ 
+# Extracting elements from the model
+
+Since we save our model as an object (i.e., `Cox_mod2`), this object has different elements that we can extract from it.  To view all elements in the object, use the `names()` function.
+
+```{r}
+names(CR_mod2)
+```
+
+## Variance-covariance matrix
+
+To obtain the estimated variance-covariance matrix, extract `var`.
+
+```{r}
+CR_mod2$var
+```
+
+This matrix represents estimated values for:
+
+Column 1                                     | Column 2
+---------------------------------------------|-------------------------------------------
+Var($\hat{\beta}_1$)               | Cov($\hat{\beta}_1$, $\hat{\beta}_2$) 
+Cov($\hat{\beta}_1$, $\hat{\beta}_2$)  | Var($\hat{\beta}_2$)
+
+## Log likelihood
+
+To obtain the evaluated log partial likelihood, extract `loglik`.
+
+```{r}
+CR_mod2$loglik
+```
+
+This result represents estimated values for:
+
+Element 1                                    | Element 2
+---------------------------------------------|-------------------------------------------
+log partial likelihood function evaluated at 0, $l_p(0)$            | log partial likelihood function evaluated at the parameter estimates, $l_p(\hat{\beta})$
+
+# Including interaction terms
+
+There are various shortcuts/symbols you can use in `R` formula syntax.
+
++ `:` includes an interaction between two terms
++ `*` includes main effects and an interaction
+
+The following two model specifications are *equivalent* and include main effects for `sex` and `age` as well as the interaction between `sex` and `age.
+
+```{r}
+CR_mod1 <- coxph(Surv(time, status) ~ as.factor(sex) + age + as.factor(sex):age, data = lung)
+summary(CR_mod1)
+
+CR_mod2 <- coxph(Surv(time, status) ~ as.factor(sex)*age, data = lung)
+summary(CR_mod2)
+```
+
+
+
+# Model selection
+
+## Nested models
+
+When comparing nested models, you can utilize the partial likelihood ratio test.  You'll need to 
+
+1. Fit the full and reduced models.
+2. Extract the log partial likelihood values for each model.
+3. Compute the test statistic and degrees of freedom.
+4. Compute the p-value.
+
+##### Step 1
+
+Fit the full and reduced models.
+
+```{r}
+CR_full <- coxph(Surv(time, status) ~ as.factor(sex) + age + as.factor(sex):age, data = lung)
+summary(CR_full)
+
+CR_red <- coxph(Surv(time, status) ~ as.factor(sex) + age, data = lung)
+summary(CR_red)
+```
+
+##### Step 2
+
+Extract the log partial likelihood values for each model.
+```{r}
+CR_full$loglik
+
+CR_red$loglik
+```
+
+##### Step 3
+
+Compute the test statistic $G_l = 2(l_f - l_r)$  and degrees of freedom ($df= f-r$). where
+
++ $l_f =$ log partial likelihood evaluated at parameter estimates for the full model
++ $l_r =$ log partial likelihood evaluated at parameter estimates for the reduced model
++ $f =$ number of parameters estimated in full model
++ $r =$ number of parameters estimated in reduced model
+
+The value of the chi-squared test statistic is:
+```{r}
+2*(CR_full$loglik[2] - CR_red$loglik[2])
+```
+Note, in this syntax `CR_full$loglik[2]` is extracting the *second* element of the `loglik` result.
+
+
+The value of the degrees of freedom is $df = 3-2=1$.
+
+
+
+##### Step 4
+
+Compute the p-value using the `pchisq` function.  The first argument, `q`, takes the value of the test statistic.
+
+```{r}
+pchisq(q = 0.2482116, df = 1, lower.tail = FALSE)
+```
+
+
+## Non-nested models
+
+Use AIC to compare non-nested models.
+
+1.  Fit the models you want to compare.
+2.  Extract the log partial likelihood values for each model.
+3.  Compute the AIC of each model, where $AIC = -2l_p(\hat{\beta}) + 2p$, where 
+
++ $l_p(\hat{\beta})=$ log partial likelihood evaluated at parameter estimates
++ $p=$ number of parameters estimated in the model.
+
+##### Step 1
+
+Fit the models you want to compare.
+
+
+```{r}
+CR_mod1 <- coxph(Surv(time, status) ~ as.factor(sex) + age, data = lung)
+summary(CR_mod1)
+
+CR_mod2 <- coxph(Surv(time, status) ~ ph.karno + age, data = lung)
+summary(CR_mod2)
+```
+
+
+##### Step 2
+
+Extract the log partial likelihood values for each model.
+
+```{r}
+CR_mod1$loglik
+
+CR_mod2$loglik
+```
+
+##### Step 3
+
+Compute the AIC of each model.
+
+```{r}
+# AIC model 1
+-2*CR_mod1$loglik[2] + 2*2
+
+# AIC model 2
+-2*CR_mod2$loglik[2] + 2*2
+```
+
+# Covariate adjusted survival curves
+
+You can compute and display survival curves that have been adjusted by covariates in your model.
+
+##### Step 1
+
+Create a Kaplan-Meier object which contains the unadjusted survival curve.
+
+```{r}
+# unadjusted survival
+KM_obj <- survfit(Surv(time, status) ~ 1, 
+                  conf.type = "none",
+                  data = lung)
+```
+
+##### Step 2
+
+Estimate the Cox regression model with the covariates for which you wish to adjust.
+
+```{r}
+# Cox regression model with age
+CR_mod <- coxph(Surv(time, status) ~ age, data = lung)
+```
+
+##### Step 3
+
+Create a data frame that contains values of the covariate for adjustment.  These constants are appended to the original data set.
+```{r}
+# data frame that contains new values for prediction
+pred_age_80 <- data.frame(age = 80, lung)
+pred_age_40 <- data.frame(age = 40, lung)
+```
+
+##### Step 4
+
+Compute adjusted survival estimates based on results from Cox model
+
+```{r}
+# adjusted survival estimates based on results from Cox model
+adj_surv_80 <- survfit(CR_mod, newdata = pred_age_80)
+adj_surv_40 <- survfit(CR_mod, newdata = pred_age_40)
+```
+
+##### Step 4
+
+Plot the adjusted and unadjusted survival curves.
+```{r}
+plot(KM_obj,
+     xlab = "Days",
+     ylab = "Est. survival prob.")
+lines(adj_surv_80, lty = 2)
+lines(adj_surv_40, lty = 3)
+
+legend("topright",
+       c("Unadjusted", "Age = 80", "Age = 40"),
+       lty = 1:3)
+```
+
+
+# Model residuals
+
+## Extracting residuals
+
+First, create the Cox regression model object and then extract the residuals using the `residuals` function.
+```{r}
+# model object
+CR_mod <- coxph(Surv(time, status) ~ as.factor(sex) + age, data = lung)
+summary(CR_mod)
+
+# martingale and deviance residuals can be appended to the original data 
+# because the create a single vector of length n (# of subjects)
+lung$mart <- residuals(CR_mod, type = "martingale")
+lung$deviance <- residuals(CR_mod, type = "deviance")
+
+# Schoenfeld residuals can be stored as a separate object 
+# because they create a matrix of dimension m x p
+schoen <- residuals(CR_mod, type = "schoenfeld")
+
+# Score residuals can be stored as a separate object 
+# because they create a matrix of dimension n x p
+score <- residuals(CR_mod, type = "score")
+```
+
+
+
+## Martingale plots
+
+Create one plot *per predictor* in the model, each with `x = ` predictor and `y = ` martingale residual.
+
+```{r}
+# create a matrix of 2 plots, with square plotting region
+par(mfrow = c(1, 2), pty = "s")
+
+# plot of sex versus martingale residual
+plot(x = lung$sex,
+     y = lung$mart,
+     xlab = "Sex",
+     ylab = "Martingale residual")
+
+# smoothed curve
+lines(lowess(lung$sex, lung$mart), col = 3)
+
+# plot of age versus martingale residual
+plot(x = lung$age,
+     y = lung$mart,
+     xlab = "Age",
+     ylab = "Martingale residual")
+
+# smoothed curve
+lines(lowess(lung$age, lung$mart), col = 3)
+```
+
+
+## Deviance plots
+
+Create a single plot with `x = ` subject index and `y = ` deviance residual.
+
+```{r}
+plot(x = 1:nrow(lung), 
+     y = lung$deviance, 
+     xlab = "Subject index",
+     ylab = "Deviance residuals")
+
+# add a horizontal line at y = 0
+abline(h = 0)
+
+# identify subjects with an absolute value of deviance that exceeds 2.5
+lung[abs(lung$deviance) > 2.5, ]
+```
+
+
+## Schoenfeld plots
+
+First, create a vector of sorted complete event times.  Then create one plot *per predictor* in the model, each with `x = ` complete event times and `y = ` score residual per predictor.
+
+```{r, eval = T}
+# vector of sorted complete event times
+# NOTE: 1 in this data set corresponds to a censored event time
+# Here, we are excluding all times that are censored
+complete_times <- sort(lung$time[lung$status!=1])
+
+# create a matrix of 2 plots, with square plotting region
+par(mfrow = c(1, 2), pty = "s")
+
+# schoen[,1] gives schoenfield residuals associated with the first predictor, sex
+plot(x = complete_times, 
+     y = schoen[,1],
+     xlab = "Complete times",
+     ylab = "Schoenfeld residuals",
+     main = "Sex")
+
+# smoothed curve
+lines(lowess(complete_times, schoen[,1]), col = 3)
+
+# schoen[,2] gives schoenfield residuals associated with the second predictor, age
+plot(x = complete_times, 
+     y = schoen[,2],
+     xlab = "Complete times",
+     ylab = "Schoenfeld residuals",
+     main = "Age")
+
+# smoothed curve
+lines(lowess(complete_times, schoen[,2]), col = 3)
+```
+
+
+## Score plots
+
+create one plot *per predictor* in the model, each with `x = ` complete event times and `y = ` score residual per predictor.
+
+```{r}
+# create a matrix of 2 plots, with square plotting region
+par(mfrow = c(1, 2), pty = "s")
+
+
+# score[,1] gives score residuals associated with the first predictor, sex
+plot(x = 1:nrow(lung), 
+     y = score[,1], 
+     xlab = "Subject index",
+     ylab = "Score residuals",
+     main = "Sex")
+
+# score[,2] gives score residuals associated with the first predictor, age
+plot(x = 1:nrow(lung), 
+     y = score[,2], 
+     xlab = "Subject index",
+     ylab = "Score residuals",
+     main = "Age")
+
+# identify observations with large score residuals
+lung[abs(score[,1]) > 1 | abs(score[,2]) > 40, ]
+```
+
+
+# Formal test of PH assumption
+
+First, create the Cox regression model object and then execute the formal test for the proportional hazards assumption using the function `cox.zph`, with the `transform = "log"` option.
+```{r}
+# model object
+CR_mod <- coxph(Surv(time, status) ~ as.factor(sex) + age, data = lung)
+cox.zph(CR_mod, transform = "log")
+```
+
+# Stratified model
+
+If you find evidence of a violation of proportional hazards assumption, you can fit a stratified model using the `strata` function in your model formula.  In the example below, we are fitting a model stratifed on `sex`.
+
+```{r}
+# model object
+CR_mod_stratified <- coxph(Surv(time, status) ~ strata(sex) + age, data = lung)
+summary(CR_mod_stratified)
+```
